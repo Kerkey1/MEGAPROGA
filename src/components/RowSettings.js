@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import {observer} from "mobx-react";
 import {Col, Divider, Form, Input, Modal, Row, Select} from "antd";
+import Command from "../Logic/Command";
+
 
 const RowSettings = observer(({
                                   rowSettingsVisible,
@@ -11,6 +13,7 @@ const RowSettings = observer(({
                                   EInvMaskM2,
                                   ECondM3,
                                   EJumpM4,
+                                  EShiftControlM7,
                                   ECarryM8,
                                   EOperandsM9,
                                   EFuncM10,
@@ -18,6 +21,7 @@ const RowSettings = observer(({
                                   EInputM12,
                                   EPswM13,
                                   EOutputM14,
+                                  dataSource
                               }) => {
 
     const [form] = Form.useForm();
@@ -26,16 +30,18 @@ const RowSettings = observer(({
         setRowSettingsVisible(false);
     });
 
-
     const onOk = (() => {
         let data = form.getFieldsValue();
+        data.reg = parseInt(data.reg, 10);
         data.m1 = parseInt(data.m1, 10);
         data.m5 = parseInt(data.m5, 10);
         data.m6 = parseInt(data.m6, 10);
         data.m15 = parseInt(data.m15, 10);
 
         Rom[curRow].SetFields(data);
+
         console.log(Rom);
+        console.log(Rom[0].Parse(curRow));
         // string = mainRom[curRow].Parse();
         // test = string;
         // console.log(test);
@@ -61,15 +67,15 @@ const RowSettings = observer(({
                     span: 50,
                 }}
             >
+
                 <Row justify="center">
                     <Col>
-
                         Входная и выходные шины
                         <Form.Item
                             name="m12"
                             label="M12"
                         >
-                            <Select style={{ width: 250 }}>
+                            <Select style={{width: 250}}>
                                 <Select.Option value={EInputM12.RDID}>RDI-->D;BI-->RDI</Select.Option>
                                 <Select.Option value={EInputM12.ZID}>ZI-->D</Select.Option>
                                 <Select.Option value={EInputM12.M1D}>M1-->D</Select.Option>
@@ -77,7 +83,8 @@ const RowSettings = observer(({
                                 <Select.Option value={EInputM12.RDID_BIRDI}>RDI-->D;BI-->RDI</Select.Option>
                                 <Select.Option value={EInputM12.ZID_BIRDI}>ZI-->D;BI-->RDI</Select.Option>
                                 <Select.Option value={EInputM12.M1D_BIRDI}>M1-->D;BI-->RDI</Select.Option>
-                                <Select.Option value={EInputM12.RDID_BIRDI_BIRK}>RDI-->D;BI-->RDI;BI-->RK</Select.Option>
+                                <Select.Option
+                                    value={EInputM12.RDID_BIRDI_BIRK}>RDI-->D;BI-->RDI;BI-->RK</Select.Option>
                             </Select>
                         </Form.Item>
                         <Form.Item
@@ -133,7 +140,7 @@ const RowSettings = observer(({
                             name="m13"
                             label="M13"
                         >
-                            <Select style={{ width: 300 }}>
+                            <Select style={{width: 300}}>
                                 <Select.Option value={EPswM13.SAVE}>Сохранение PSW</Select.Option>
                                 <Select.Option value={EPswM13.LD_FROM_FLAGS}>Загрузка по признакам МПС
                                     К1804ВС1</Select.Option>
@@ -149,7 +156,7 @@ const RowSettings = observer(({
                             name="m1"
                             label="M1"
                         >
-                            <Input></Input>
+                            <Input pattern="^[ 0-7]+$"></Input>
                         </Form.Item>
                         <Form.Item
                             name="m15"
@@ -167,7 +174,7 @@ const RowSettings = observer(({
                             name="m2"
                             label="M2"
                         >
-                            <Select style={{ width: 500 }}>
+                            <Select style={{width: 500}}>
                                 <Select.Option value={EInvMaskM2.NNOT}>Нет инверсии условия</Select.Option>
                                 <Select.Option value={EInvMaskM2.NOT}>Инверсия условия</Select.Option>
                                 <Select.Option value={EInvMaskM2.NNOT_MASK}>Нет инварсии условия(маска)</Select.Option>
@@ -243,9 +250,15 @@ const RowSettings = observer(({
                             name="m7"
                             label="M7"
                         >
-                            <Select style={{ width: 500 }}>
-                                <Select.Option value={3}>Проверка условия и окончания цикла
-                                </Select.Option>
+                            <Select style={{width: 500}}>
+                                <Select.Option
+                                    value={EShiftControlM7.PSW0R0RQ0}>[PSW(0)]&lt;-[R]&lt;--'0',;&lt;--[RQ]&lt;--'0'</Select.Option>
+                                <Select.Option
+                                    value={EShiftControlM7.PSW0RRQ}>&lt;==[PSW(0)]&lt;--[R]&lt;==(цикл);&lt;--[RQ]&lt;--(цикл)</Select.Option>
+                                <Select.Option
+                                    value={EShiftControlM7.PSW0RRQ1}>[PSW(0)]&lt;--[R]&lt;--[RQ&lt;--'1'</Select.Option>
+                                <Select.Option
+                                    value={EShiftControlM7.PSW0RRQ0}>[PSW(0)]&lt;--[R]&lt;--[RQ&lt;--'0'</Select.Option>
                             </Select>
                         </Form.Item>
                         <Form.Item

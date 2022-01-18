@@ -11,3 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.classForRegisters{
+  width:150px;
+}
+
+.classForRegisters .ant-input-group-addon{
+  width:60px;
+}

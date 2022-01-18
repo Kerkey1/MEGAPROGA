@@ -1,26 +1,20 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {observer} from "mobx-react";
-import { Table} from 'antd';
+import {Button, Table} from 'antd';
 import Command from "../Logic/Command";
 
-const TableComponent = observer(({setRowSettingsVisible, setCurRow, curRow, Rom,dataSource}) => {
+const TableComponent = observer(({setRowSettingsVisible, setCurRow,dataSource,columns, addRow}) => {
 
-    const columns = [
-        {
-            title: 'Address',
-            dataIndex: 'address',
-            width: '40%',
-        },
-        {
-            title: 'Command',
-            dataIndex: 'command',
-            width: '40%',
-        }
-    ];
+
 
 
     return <>
+        <Button onClick={addRow}>
+            Add a row
+        </Button>
+
         <Table
+            pagination={false}
             dataSource={dataSource}
             columns={columns}
             onRow={(record, rowIndex) => {

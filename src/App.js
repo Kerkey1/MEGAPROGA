@@ -7,11 +7,42 @@ import TableComponent from "./components/TableComponent";
 import RowSettings from "./components/RowSettings";
 import Registers from "./Logic/Reg";
 import Command from "./Logic/Command";
+import RegistersView from "./components/RegistersView";
 
 
 let mainState = new Registers();
 mainState.PSW = 1;
-let mainRom = [new Command(), new Command(), new Command(), new Command(), new Command()]
+let mainRom = [new Command(), new Command(), new Command(), new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command(),
+    new Command()
+];
+
 const {Header, Footer, Content} = Layout;
 
 const App = observer(() => {
@@ -78,6 +109,13 @@ const App = observer(() => {
         JP: 16,
     };
 
+    const EShiftControlM7 = {
+        PSW0R0RQ0: 0,
+        PSW0RRQ: 1,
+        PSW0RRQ1: 2,
+        PSW0RRQ0: 3
+    };
+
     const ECarryM8 = {
         _0: 0,
         _1: 1,
@@ -142,37 +180,76 @@ const App = observer(() => {
         YMAR: 2
     };
 
-    let dataSource = [
+
+    const commandArray = [];
+    const [rowSettingsVisible, setRowSettingsVisible] = useState(false);
+    const [curRow, setCurRow] = useState(0);
+
+    let [dataSource, setDataSource] = useState([
         {
             key: '0',
             address: 0,
-            command: mainRom[0].Parse()
+            command: 0,
         },
         {
             key: '1',
-            address: 3,
-            command: mainRom[3].Parse()
+            address: 1,
+            command: 1,
+        }
+    ]);
+
+    const columns = [
+        {
+            title: 'Address',
+            dataIndex: 'address',
+            width: '40%',
+        },
+        {
+            title: 'Command',
+            dataIndex: 'command',
+            width: '40%',
+            render: e => mainRom[e].Parse()
         }
     ];
 
-    const commandArray=[];
-    const [rowSettingsVisible, setRowSettingsVisible] = useState(false);
-    const [curRow, setCurRow] = useState(0);
+    // const editIndex = () => {
+    //
+    // };
+
+    const addRow = () => {
+
+        const aLength= dataSource.length;
+
+        const tempKey = aLength + 1;
+        const tempA = aLength + 1;
+        const tempC = aLength + 1;
+        // mainRom[3].push([new Command()]);
+        const newRow = {
+            key: tempKey,
+            address: tempA,
+            command: tempC,
+        }
+        setDataSource(pre => {
+            return [...pre, newRow];
+        })
+    };
 
     return <>
         <Layout>
             <Header>ddd</Header>
             <Content>
                 <Row>
-                    <Col span={12}><TableComponent
+                    <Col span={6}><TableComponent
                         setRowSettingsVisible={setRowSettingsVisible}
                         setCurRow={setCurRow}
-                        curRow={curRow}
-                        Rom={mainRom}
                         dataSource={dataSource}
+                        columns={columns}
+                        addRow={addRow}
                     />
                     </Col>
-                    <Col span={12}>col-12</Col>
+                    <Col span={18}>
+                        <RegistersView/>
+                    </Col>
                     <RowSettings
                         rowSettingsVisible={rowSettingsVisible}
                         setRowSettingsVisible={setRowSettingsVisible}
@@ -181,6 +258,7 @@ const App = observer(() => {
                         EInvMaskM2={EInvMaskM2}
                         ECondM3={ECondM3}
                         EJumpM4={EJumpM4}
+                        EShiftControlM7={EShiftControlM7}
                         ECarryM8={ECarryM8}
                         EOperandsM9={EOperandsM9}
                         EFuncM10={EFuncM10}
@@ -189,6 +267,7 @@ const App = observer(() => {
                         EPswM13={EPswM13}
                         EOutputM14={EOutputM14}
                         Rom={mainRom}
+                        dataSource={dataSource}
                     />
                 </Row>
             </Content>
