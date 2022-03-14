@@ -1,187 +1,80 @@
 import React, {useEffect, useState} from 'react';
 import {observer} from "mobx-react";
-import {Col, Layout, Row} from "antd";
+import {Button, Col, Form, Layout, Row} from "antd";
 import './App.css';
-import "antd/dist/antd.css";
+import './index.css'
+import 'antd/dist/antd.css';
 import TableComponent from "./components/TableComponent";
 import RowSettings from "./components/RowSettings";
 import Registers from "./Logic/Reg";
 import Command from "./Logic/Command";
+import {Exec} from "./Funcrions/FunctionsForBack";
 import RegistersView from "./components/RegistersView";
-
-
-let mainState = new Registers();
-mainState.PSW = 1;
-let mainRom = [new Command(), new Command(), new Command(), new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command(),
-    new Command()
-];
+import {
+    ECarryM8,
+    ECondM3,
+    EFuncM10, EInputM12,
+    EInvMaskM2,
+    EJumpM4,
+    EOperandsM9,
+    EOutputM14, EPswM13, EResultM11,
+    EShiftControlM7, states
+} from "./Consts/ConstM";
 
 const {Header, Footer, Content} = Layout;
 
+let mainState = new Registers();
+mainState.PSW = 1;
+
+let mainRom = [];
+let state_regs = [];
+let temp_regs = [];
+let command = [];
+let tempRegs;
+
+mainRom[0] = new Command();
+
 const App = observer(() => {
 
-    const EInvMaskM2 = {
-        NNOT: 0,
-        NOT: 1,
-        NNOT_MASK: 2,
-        NOT_MASK: 3,
+    const [values, setValues] = useState({
+        m1: null,
+        m2: null,
+        m3: null,
+        m4: null,
+        m5: null,
+        m6: null,
+        m7: null,
+        m8: null,
+        m9: null,
+        m10: null,
+        m11: null,
+        m12: null,
+        m13: null,
+        m14: null,
+        m15: null
+    });
+
+    let value={
+        m1: null,
+        m2: null,
+        m3: null,
+        m4: null,
+        m5: null,
+        m6: null,
+        m7: null,
+        m8: null,
+        m9: null,
+        m10: null,
+        m11: null,
+        m12: null,
+        m13: null,
+        m14: null,
+        m15: null
     };
 
-    const ECondM3 = {
-        PSW0: 0,
-        PSW1: 1,
-        PSW2: 2,
-        PSW3: 3,
-        PSW4: 4,
-        PSW5: 5,
-        CT: 6,
-        CONSTZ: 7,
-        FLG0: 8,
-        FLG1: 9,
-        FLG2: 10,
-        FLG3: 11,
-        FLG4: 12,
-        FLG5: 13,
-        FLG6: 14,
-        FLG7: 15,
-
-        /*Óðîâüíü 1*/
-        LV1: 8,
-        /*Óðîâüíü 2.1*/
-        LV21: 9,
-        /*Óðîâüíü 2.2*/
-        LV22: 10,
-        /*Óðîâüíü 3*/
-        LV3: 11,
-        /*Óðîâüíü 4*/
-        LV4: 12,
-        /*Óðîâüíü 5*/
-        LV5: 13,
-        /*RK[11/9] == 0*/
-        RK119: 15,
-        /*RK[5/3] == 0*/
-        RK53: 15,
-    };
-
-    const EJumpM4 = {
-        JZ: 1,
-        CJS: 2,
-        JMAP: 3,
-        CJP: 4,
-        PUSH: 5,
-        JSRP: 6,
-        CJV: 7,
-        JRP: 8,
-        RFCT: 9,
-        RPCT: 10,
-        CRTN: 11,
-        CJPP: 12,
-        LDCT: 13,
-        LOOP: 14,
-        CONT: 15,
-        JP: 16,
-    };
-
-    const EShiftControlM7 = {
-        PSW0R0RQ0: 0,
-        PSW0RRQ: 1,
-        PSW0RRQ1: 2,
-        PSW0RRQ0: 3
-    };
-
-    const ECarryM8 = {
-        _0: 0,
-        _1: 1,
-        CARRY_TO_PSW: 2,
-        NCARRY_TO_PSW: 3
-    };
-
-    const EOperandsM9 = {
-        AQ: 0,
-        AB: 1,
-        ZQ: 2,
-        ZB: 3,
-        ZA: 4,
-        DA: 5,
-        DQ: 6,
-        DZ: 7
-    };
-
-    const EFuncM10 = {
-        ADD: 0,
-        SUBS: 1,
-        SUBR: 2,
-        OR: 3,
-        AND: 4,
-        NRAND: 5,
-        XOR: 6,
-        NRXOR: 7
-    };
-
-    const EResultM11 = {
-        FQ: 0,
-        NOP: 1,
-        FBA: 2,
-        FBF: 3,
-        RSH_FBQ: 4,
-        RSH_FB: 5,
-        LSH_BFQ: 6,
-        LSH_BF: 7
-    };
-
-    const EInputM12 = {
-        RDID: 0,
-        ZID: 1,
-        M1D: 2,
-        PSWD: 3,
-        RDID_BIRDI: 4,
-        ZID_BIRDI: 5,
-        M1D_BIRDI: 6,
-        RDID_BIRDI_BIRK: 7
-    };
-
-    const EPswM13 = {
-        SAVE: 0,
-        LD_FROM_FLAGS: 1,
-        LD_WITH_SHIFT: 2,
-        LD_FROM_Y: 3
-    };
-
-    const EOutputM14 = {
-        NONE: 0,
-        YRDO: 1,
-        YMAR: 2
-    };
-
-
-    const commandArray = [];
+    const [form] = Form.useForm();
+    const [z, setZ] = useState(1);
+    const [data, setData] = useState();
     const [rowSettingsVisible, setRowSettingsVisible] = useState(false);
     const [curRow, setCurRow] = useState(0);
 
@@ -190,11 +83,6 @@ const App = observer(() => {
             key: '0',
             address: 0,
             command: 0,
-        },
-        {
-            key: '1',
-            address: 1,
-            command: 1,
         }
     ]);
 
@@ -212,31 +100,50 @@ const App = observer(() => {
         }
     ];
 
-    // const editIndex = () => {
-    //
-    // };
+    useEffect(() => {
+        let i = 1;
+        for (i in states) {
+            temp_regs[i] = new Registers(states[i]);
+        }
+        setData(temp_regs);
+    }, []);
 
     const addRow = () => {
-
-        const aLength= dataSource.length;
-
-        const tempKey = aLength + 1;
-        const tempA = aLength + 1;
-        const tempC = aLength + 1;
-        // mainRom[3].push([new Command()]);
+        const aLength = dataSource.length;
+        mainRom[aLength] = new Command();
         const newRow = {
-            key: tempKey,
-            address: tempA,
-            command: tempC,
+            key: aLength,
+            address: aLength,
+            command: aLength,
         }
         setDataSource(pre => {
             return [...pre, newRow];
         })
     };
 
+    const handleClick = () => {
+
+        let j = z;
+        j = j + 1;
+
+        setZ(j);
+        console.log(z, data[z].CMK);
+    };
+
+
+    const loadCommands = () => {
+        console.log(mainRom);
+        Exec(temp_regs[0], mainRom).then(v => tempRegs = v);
+        console.log(tempRegs);
+    };
+
     return <>
         <Layout>
-            <Header>ddd</Header>
+            <Header>
+                <Button onClick={handleClick}>Next</Button>
+                <Button onClick={loadCommands}>Load Commands</Button>
+                <Button>Clear commands</Button>
+            </Header>
             <Content>
                 <Row>
                     <Col span={6}><TableComponent
@@ -245,15 +152,18 @@ const App = observer(() => {
                         dataSource={dataSource}
                         columns={columns}
                         addRow={addRow}
+                        command={command}
+                        setValues={setValues}
+                        value={value}
                     />
                     </Col>
                     <Col span={18}>
-                        <RegistersView/>
+                        {data &&
+                        <RegistersView reg={data} index={z}/>}
                     </Col>
                     <RowSettings
                         rowSettingsVisible={rowSettingsVisible}
                         setRowSettingsVisible={setRowSettingsVisible}
-                        commandArray={commandArray}
                         curRow={curRow}
                         EInvMaskM2={EInvMaskM2}
                         ECondM3={ECondM3}
@@ -268,10 +178,14 @@ const App = observer(() => {
                         EOutputM14={EOutputM14}
                         Rom={mainRom}
                         dataSource={dataSource}
+                        command={command}
+                        form={form}
+                        values={value}
                     />
+
                 </Row>
             </Content>
-            <Footer>Footer</Footer>
+            <Footer></Footer>
         </Layout>
     </>
 })

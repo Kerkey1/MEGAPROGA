@@ -1,12 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import {observer} from "mobx-react";
 import {Button, Table} from 'antd';
-import Command from "../Logic/Command";
 
-const TableComponent = observer(({setRowSettingsVisible, setCurRow,dataSource,columns, addRow}) => {
+const TableComponent = observer(({
+                                     setRowSettingsVisible,
+                                     setCurRow,
+                                     dataSource,
+                                     columns,
+                                     addRow,
+                                     command,
+                                     setValues,
+                                     value
+                                 }) => {
 
-
-
+    function isStyledDifferently(rowObject, index) {
+        return rowObject.isActive ? true : false;
+    }
 
     return <>
         <Button onClick={addRow}>
@@ -17,10 +26,14 @@ const TableComponent = observer(({setRowSettingsVisible, setCurRow,dataSource,co
             pagination={false}
             dataSource={dataSource}
             columns={columns}
+            rowHighlightTest={isStyledDifferently}
             onRow={(record, rowIndex) => {
                 return {
                     onDoubleClick: event => {
                         setCurRow(parseInt(record.address, 10));
+                        setValues(command[record.address]);
+                        value = command[record.address];
+                        console.log(value);
                         setRowSettingsVisible(true);
                     },
                 };

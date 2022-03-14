@@ -19,3 +19,7 @@ code {
 .classForRegisters .ant-input-group-addon{
   width:60px;
 }
+
+.divider-horizontal .ant-divider-horizontal{
+  margin:0px;
+}

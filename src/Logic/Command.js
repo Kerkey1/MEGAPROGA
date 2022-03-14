@@ -53,22 +53,22 @@ const ECondM3 = {
 };
 
 const EJumpM4 = {
-    JZ: 1,
-    CJS: 2,
-    JMAP: 3,
-    CJP: 4,
-    PUSH: 5,
-    JSRP: 6,
-    CJV: 7,
-    JRP: 8,
-    RFCT: 9,
-    RPCT: 10,
-    CRTN: 11,
-    CJPP: 12,
-    LDCT: 13,
-    LOOP: 14,
-    CONT: 15,
-    JP: 16,
+    JZ: 0,
+    CJS: 1,
+    JMAP: 2,
+    CJP: 3,
+    PUSH: 4,
+    JSRP: 5,
+    CJV: 6,
+    JRP: 7,
+    RFCT: 8,
+    RPCT: 9,
+    CRTN: 10,
+    CJPP: 11,
+    LDCT: 12,
+    LOOP: 13,
+    CONT: 14,
+    JP: 15,
 };
 
 const ECarryM8 = {
