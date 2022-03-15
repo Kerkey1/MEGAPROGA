@@ -36,25 +36,7 @@ mainRom[0] = new Command();
 
 const App = observer(() => {
 
-    const [values, setValues] = useState({
-        m1: null,
-        m2: null,
-        m3: null,
-        m4: null,
-        m5: null,
-        m6: null,
-        m7: null,
-        m8: null,
-        m9: null,
-        m10: null,
-        m11: null,
-        m12: null,
-        m13: null,
-        m14: null,
-        m15: null
-    });
-
-    let value={
+    let value = {
         m1: null,
         m2: null,
         m3: null,
@@ -73,7 +55,7 @@ const App = observer(() => {
     };
 
     const [form] = Form.useForm();
-    const [z, setZ] = useState(1);
+    const [z, setZ] = useState(0);
     const [data, setData] = useState();
     const [rowSettingsVisible, setRowSettingsVisible] = useState(false);
     const [curRow, setCurRow] = useState(0);
@@ -122,7 +104,6 @@ const App = observer(() => {
     };
 
     const handleClick = () => {
-
         let j = z;
         j = j + 1;
 
@@ -146,16 +127,19 @@ const App = observer(() => {
             </Header>
             <Content>
                 <Row>
-                    <Col span={6}><TableComponent
-                        setRowSettingsVisible={setRowSettingsVisible}
-                        setCurRow={setCurRow}
-                        dataSource={dataSource}
-                        columns={columns}
-                        addRow={addRow}
-                        command={command}
-                        setValues={setValues}
-                        value={value}
-                    />
+
+                    <Col span={6}>
+                        {data && <TableComponent
+                            setRowSettingsVisible={setRowSettingsVisible}
+                            setCurRow={setCurRow}
+                            dataSource={dataSource}
+                            columns={columns}
+                            addRow={addRow}
+                            command={command}
+                            value={value}
+                            data={data}
+                            z={z}
+                        />}
                     </Col>
                     <Col span={18}>
                         {data &&

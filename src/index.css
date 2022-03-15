@@ -23,3 +23,10 @@ code {
 .divider-horizontal .ant-divider-horizontal{
   margin:0px;
 }
+.yellow-color {
+  background: rgba(255,255,0,0.3);
+}
+
+.green-color {
+  background: rgba(0,255,0,0.3);
+}

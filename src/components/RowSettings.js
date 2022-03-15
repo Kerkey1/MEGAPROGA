@@ -76,11 +76,20 @@ const RowSettings = observer(({
 
         data = form.getFieldsValue(null, meta => meta.touched);
 
+        if (data.m1 !== undefined) {
+            data.m1 = parseInt(data.m1, 10);
+        }
+        if (data.m5 !== undefined) {
+            data.m5 = parseInt(data.m5, 2);
+        }
+        if (data.m6 !== undefined) {
+            data.m6 = parseInt(data.m6, 2);
+        }
+        if (data.m15 !== undefined) {
+            data.m15 = parseInt(data.m15, 10);
+        }
         Object.assign(resData, data);
-        resData.m1 = parseInt(resData.m1, 10);
-        resData.m5 = parseInt(resData.m5, 2);
-        resData.m6 = parseInt(resData.m6, 2);
-        resData.m15 = parseInt(resData.m15, 10);
+
         Rom[curRow].SetFields(resData);
         command[curRow] = resData;
         console.log(command);

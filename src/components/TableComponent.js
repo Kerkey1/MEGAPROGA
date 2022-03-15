@@ -9,13 +9,10 @@ const TableComponent = observer(({
                                      columns,
                                      addRow,
                                      command,
-                                     setValues,
-                                     value
+                                     value,
+                                     data,
+                                     z
                                  }) => {
-
-    function isStyledDifferently(rowObject, index) {
-        return rowObject.isActive ? true : false;
-    }
 
     return <>
         <Button onClick={addRow}>
@@ -26,12 +23,19 @@ const TableComponent = observer(({
             pagination={false}
             dataSource={dataSource}
             columns={columns}
-            rowHighlightTest={isStyledDifferently}
+            rowClassName={(record, index) => {
+                if (z > 0) {
+                    let cur=(record.address === data[z - 1].CMK ? "green-color" : "");
+                    let next= (record.address === data[z].CMK ? "yellow-color" : "");
+                    return [cur,next]
+                }
+                else
+                return (record.address === data[z].CMK && record.address !== 0 ? "yellow-color" : "")
+            }}
             onRow={(record, rowIndex) => {
                 return {
                     onDoubleClick: event => {
                         setCurRow(parseInt(record.address, 10));
-                        setValues(command[record.address]);
                         value = command[record.address];
                         console.log(value);
                         setRowSettingsVisible(true);

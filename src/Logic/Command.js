@@ -224,19 +224,18 @@ export default function Command(arg1){
                 break;
         }
         const GetOpAddr = function (i) {
-            if (!(M[i] >> i)) {
+            if (!(M[i]&0b10000)) {
                 return M[i];
-            } else if ((M[i] >> 4) && !(M[i] >> 3)) {
+            } else if ((M[i]&0b10000) && !(M[i]&0b01000)) {
                 return M[i] & 0b01111;
-            } else if ((M[i] >> 4) && (M[i] >> 3)) {
+            } else if ((M[i]&0b10000) && (M[i]&0b01000)) {
                 return M[i] & 0b00111;
             }
         }
 
         let operands = ["", ""];
         let A = GetOpAddr(4), B = GetOpAddr(5);
-
-        switch (M[7]) {
+        switch (M[8]) {
             case EOperandsM9.AB:
                 operands[0] = "R" + A;
                 operands[1] = "R" + B;
@@ -273,7 +272,6 @@ export default function Command(arg1){
         }
 
         let func = "";
-        const temp = operands[0];
         switch (M[9]) {
             case EFuncM10.ADD:
                 func = " + ";
@@ -296,6 +294,7 @@ export default function Command(arg1){
                 func = " - ";
                 break;
             case EFuncM10.SUBS:
+                const temp = operands[0];
                 operands[0] = operands[1];
                 operands[1] = temp;
                 func = " - "
@@ -307,10 +306,9 @@ export default function Command(arg1){
         let operation = operands[0] + func + operands[1];
         switch (M[10]) {
             case EResultM11.NOP:
-
+                str += operation + "\n";
                 break;
-            case EResultM11.FBA:
-            case EResultM11.FBF:
+            case EResultM11.FBA: case EResultM11.FBF:
                 str += "R" + B + "<- " + operation + "\n";
                 break;
             case EResultM11.FQ:
@@ -346,8 +344,7 @@ export default function Command(arg1){
                 break;
         }
         switch (M[13]) {
-            case 0:
-            case 3:
+            case 0: case 3:
                 str += "NOP\n"
                 break;
             case EOutputM14.YRDO:
@@ -362,10 +359,10 @@ export default function Command(arg1){
             "RFCT", "RPCT", "CRTN", "CJPP", "LDCT", "LOOP", "CONT", "JP",
         ];
         const condition_strs = [
-            ["PSW[0]", "PSW[0]"], ["PSW[1]", "PSW[1]"], ["PSW[2]", "PSW[2]"], ["PSW[3]", "PSW[3]"],
-            ["PSW[4]", "PSW[4]"], ["PSW[5]", "PSW[5]"], ["CT", "CT"], ["CONST 0", "CONST 0"],
-            ["FLG[0]", "Level 1"], ["FLG[1]", "Level 2.1"]["FLG[2]", "Level 2.2"], ["FLG[3]", "Level 3"],
-            ["FLG[4]", "Level 4"], ["FLG[5]", "Level 5"], ["FLG[6]", "RK[11/9] == 0"], ["FLG[7]", "RK[5/3] == 0"]
+            ["PSW[0]", "PSW[0]"],["PSW[1]", "PSW[1]"],["PSW[2]", "PSW[2]"],["PSW[3]", "PSW[3]"],
+            ["PSW[4]", "PSW[4]"],["PSW[5]", "PSW[5]"],["CT", "CT"],["CONST 0", "CONST 0"],
+            ["FLG[0]", "Level 1"],["FLG[1]", "Level 2.1"],["FLG[2]", "Level 2.2"],["FLG[3]", "Level 3"],
+            ["FLG[4]", "Level 4"],["FLG[5]", "Level 5"],["FLG[6]", "RK[11/9] == 0"],["FLG[7]", "RK[5/3] == 0"]
         ];
         const inversion = (M[1] == EInvMaskM2.NOT || M[1] == EInvMaskM2.NOT_MASK);
         const has_mask = (M[1] == EInvMaskM2.NNOT_MASK || M[1] == EInvMaskM2.NOT_MASK);
@@ -375,7 +372,7 @@ export default function Command(arg1){
 
         str += "M1: " + M[0].toString(8) + "; M15: " + M[14].toString(8);
 
-        return (<p style={{whiteSpace: 'pre'}}>{str}</p>);
+        return str;
     }
     this.ToJson = function () {
         //TODO
