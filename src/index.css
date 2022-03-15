@@ -13,15 +13,24 @@ code {
 }
 
 .classForRegisters{
-  width:150px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
+
 
 .classForRegisters .ant-input-group-addon{
   width:60px;
 }
-
+.classForRegisters .ant-input-group-wrapper{
+  min-width: 100px;
+  width:10vw!important;
+}
 .divider-horizontal .ant-divider-horizontal{
   margin:0px;
+}
+.ant-input-disabled{
+  color:black!important;
 }
 .yellow-color {
   background: rgba(255,255,0,0.3);
@@ -29,4 +38,19 @@ code {
 
 .green-color {
   background: rgba(0,255,0,0.3);
+}
+.anticon{
+  padding-top:5px;
+}
+.anticon svg{
+  font-size:23px
+}
+.anticon-caret-right svg{
+  color:limegreen;
+  font-size: 32px;
+  margin-left: -3px;
+}
+.anticon-minus-square svg{
+  color:#f5222d;
+  background-color:#f5222d;
 }

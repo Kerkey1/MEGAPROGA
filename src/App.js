@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {observer} from "mobx-react";
-import {Button, Col, Form, Layout, Row} from "antd";
+import {Button, Col, Form, Layout, Menu, Row} from "antd";
 import './App.css';
 import './index.css'
 import 'antd/dist/antd.css';
@@ -20,6 +20,13 @@ import {
     EOutputM14, EPswM13, EResultM11,
     EShiftControlM7, states
 } from "./Consts/ConstM";
+import {
+    CaretRightOutlined,
+    ClearOutlined,
+    DownloadOutlined,
+    MinusSquareFilled, PlusOutlined,
+    UploadOutlined
+} from "@ant-design/icons";
 
 const {Header, Footer, Content} = Layout;
 
@@ -118,16 +125,43 @@ const App = observer(() => {
         console.log(tempRegs);
     };
 
+    const stop=()=>{
+
+    };
+
     return <>
         <Layout>
-            <Header>
-                <Button onClick={handleClick}>Next</Button>
-                <Button onClick={loadCommands}>Load Commands</Button>
-                <Button>Clear commands</Button>
-            </Header>
             <Content>
                 <Row>
+                    <Col span={1}>
+                        <Menu
+                            mode="inline"
+                            theme="dark"
+                            style={{height:"100vh",width:"auto"}}
+                            inlineCollapsed={true}
+                            selectable={false}
+                        >
 
+                            <Menu.Item key="0" icon={<CaretRightOutlined/>} onClick={handleClick} >
+                               Next
+                            </Menu.Item>
+                            <Menu.Item key="1" icon={<MinusSquareFilled/>}>
+                               Stop
+                            </Menu.Item>
+                            <Menu.Item key="2" icon={<PlusOutlined />} onClick={addRow} >
+                                Add row
+                            </Menu.Item>
+                            <Menu.Item key="3" icon={<DownloadOutlined />} onClick={loadCommands}>
+                                Load commands
+                            </Menu.Item>
+                            <Menu.Item key="4" icon={<UploadOutlined />}>
+                                Export commands
+                            </Menu.Item>
+                            <Menu.Item key="5" icon={<ClearOutlined />}>
+                                Clear commands
+                            </Menu.Item>
+                        </Menu>
+                    </Col>
                     <Col span={6}>
                         {data && <TableComponent
                             setRowSettingsVisible={setRowSettingsVisible}
@@ -141,7 +175,7 @@ const App = observer(() => {
                             z={z}
                         />}
                     </Col>
-                    <Col span={18}>
+                    <Col span={17}>
                         {data &&
                         <RegistersView reg={data} index={z}/>}
                     </Col>
@@ -169,7 +203,6 @@ const App = observer(() => {
 
                 </Row>
             </Content>
-            <Footer></Footer>
         </Layout>
     </>
 })

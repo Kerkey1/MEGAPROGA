@@ -15,10 +15,6 @@ const TableComponent = observer(({
                                  }) => {
 
     return <>
-        <Button onClick={addRow}>
-            Add a row
-        </Button>
-
         <Table
             pagination={false}
             dataSource={dataSource}
