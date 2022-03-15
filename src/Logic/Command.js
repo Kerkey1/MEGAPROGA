@@ -372,7 +372,7 @@ export default function Command(arg1){
 
         str += "M1: " + M[0].toString(8) + "; M15: " + M[14].toString(8);
 
-        return str;
+        return (<p style={{whiteSpace: 'pre'}}>{str}</p>);
     }
     this.ToJson = function () {
         //TODO
