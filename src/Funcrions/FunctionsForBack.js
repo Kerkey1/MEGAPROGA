@@ -1,5 +1,3 @@
-import Registers from "../Logic/Reg";
-
 const RomToString = function (rom) {
     let str = "";
     let i = 0;
@@ -10,17 +8,19 @@ const RomToString = function (rom) {
     return str;
 }
 
-export const Exec = async function (curent_state, rom) {
-    let response = await fetch('cgi-bin/untitled', {
+export const Exec = async function (curent_state, rom, cmd_index, tact_count) {
+    let response = await fetch('cgi-bin/K1804', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/text;charset=utf-8'
         },
-        body: curent_state.ToString() + '\n' + RomToString(rom) + '\n'
+        body: curent_state.ToString() + '\n' + RomToString(rom) + '\n' + cmd_index + ',' + tact_count
     });
-    let output = await response.json();
-    console.log(output);
+    let returned_states_raw = await response.json();
+    console.log(returned_states_raw)
+    return returned_states_raw
 }
+
 
 
 

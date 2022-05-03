@@ -3,7 +3,7 @@ import {Form, Select} from "antd";
 import React from "react";
 
 
-const M12M14 = observer(({EInputM12, EOutputM14, values}) => {
+const M12M14 = observer(({EInputM12, EOutputM14}) => {
 
 
     return <>
@@ -11,7 +11,7 @@ const M12M14 = observer(({EInputM12, EOutputM14, values}) => {
             name="m12"
             label="M12"
         >
-            <Select defaultValue={values.m12} style={{width: 250}}>
+            <Select style={{width: 250}}>
                 <Select.Option value={EInputM12.RDID}>0.RDI-->D;BI-->RDI</Select.Option>
                 <Select.Option value={EInputM12.ZID}>1.ZI-->D</Select.Option>
                 <Select.Option value={EInputM12.M1D}>2.M1-->D</Select.Option>
@@ -27,7 +27,7 @@ const M12M14 = observer(({EInputM12, EOutputM14, values}) => {
             name="m14"
             label="M14"
         >
-            <Select defaultValue={values.m14}>
+            <Select>
                 <Select.Option value={EOutputM14.NONE}>0.null</Select.Option>
                 <Select.Option value={EOutputM14.YRDO}>1.Y-->RDO</Select.Option>
                 <Select.Option value={EOutputM14.YMAR}>2.Y-->MAR</Select.Option>

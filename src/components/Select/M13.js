@@ -3,14 +3,14 @@ import {Form, Input, Select} from "antd";
 import React from "react";
 
 
-const M13 = observer(({EPswM13,values}) => {
+const M13 = observer(({EPswM13}) => {
 
     return <>
         <Form.Item
             name="m13"
             label="M13"
         >
-            <Select defaultValue={values.m13}  style={{width: 300}}>
+            <Select style={{width: 300}}>
                 <Select.Option value={EPswM13.SAVE}>0.Сохранение PSW</Select.Option>
                 <Select.Option value={EPswM13.LD_FROM_FLAGS}>1.Загрузка по признакам МПС
                     К1804ВС1</Select.Option>

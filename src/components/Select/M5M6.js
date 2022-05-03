@@ -3,18 +3,18 @@ import {Form, Input, Select} from "antd";
 import React from "react";
 
 
-const M5M6 = observer(({values}) => {
+const M5M6 = observer(() => {
 
     return <>
         <Form.Item
             name="m5"
             label="M5">
-            <Input defaultValue={values.m5} ></Input>
+            <Input></Input>
         </Form.Item>
         <Form.Item
             name="m6"
             label="M6">
-            <Input defaultValue={values.m6} ></Input>
+            <Input></Input>
         </Form.Item>
     </>
 });

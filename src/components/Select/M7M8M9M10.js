@@ -3,14 +3,14 @@ import {Form, Input, Select} from "antd";
 import React from "react";
 
 
-const M7M8M9M10 = observer(({EShiftControlM7,ECarryM8,EOperandsM9,EFuncM10,values}) => {
+const M7M8M9M10 = observer(({EShiftControlM7, ECarryM8, EOperandsM9, EFuncM10}) => {
 
     return <>
         <Form.Item
             name="m7"
             label="M7"
         >
-            <Select defaultValue={values.m7}  style={{width: 500}}>
+            <Select style={{width: 500}}>
                 <Select.Option
                     value={EShiftControlM7.PSW0R0RQ0}>0.[PSW(0)]&lt;-[R]&lt;--'0',;&lt;--[RQ]&lt;--'0'</Select.Option>
                 <Select.Option
@@ -25,7 +25,7 @@ const M7M8M9M10 = observer(({EShiftControlM7,ECarryM8,EOperandsM9,EFuncM10,value
             name="m8"
             label="M8"
         >
-            <Select defaultValue={values.m8} >
+            <Select>
                 <Select.Option value={ECarryM8._0}>0.'0'</Select.Option>
                 <Select.Option value={ECarryM8._1}>1.'1'</Select.Option>
                 <Select.Option value={ECarryM8.CARRY_TO_PSW}>2.PSW[0]</Select.Option>
@@ -36,7 +36,7 @@ const M7M8M9M10 = observer(({EShiftControlM7,ECarryM8,EOperandsM9,EFuncM10,value
             name="m9"
             label="M9"
         >
-            <Select defaultValue={values.m9} >
+            <Select>
                 <Select.Option value={EOperandsM9.AQ}>0.A::Q</Select.Option>
                 <Select.Option value={EOperandsM9.AB}>1.A::B</Select.Option>
                 <Select.Option value={EOperandsM9.ZQ}>2.0::Q</Select.Option>
@@ -51,7 +51,7 @@ const M7M8M9M10 = observer(({EShiftControlM7,ECarryM8,EOperandsM9,EFuncM10,value
             name="m10"
             label="M10"
         >
-            <Select defaultValue={values.m10}>
+            <Select>
                 <Select.Option value={EFuncM10.ADD}>0.R+S+C0</Select.Option>
                 <Select.Option value={EFuncM10.SUBS}>1.S-R-1+C0</Select.Option>
                 <Select.Option value={EFuncM10.SUBR}>2.R-S-1+C0</Select.Option>

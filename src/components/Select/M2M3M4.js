@@ -5,7 +5,7 @@ import M3Mask from "./M3Mask";
 import M3 from "./M3";
 
 
-const M2M3M4 = observer(({EInvMaskM2, ECondM3, EJumpM4,values}) => {
+const M2M3M4 = observer(({EInvMaskM2, ECondM3, EJumpM4}) => {
 
     const [check, setCheck] = useState(true);
 
@@ -22,7 +22,7 @@ const M2M3M4 = observer(({EInvMaskM2, ECondM3, EJumpM4,values}) => {
             name="m2"
             label="M2"
         >
-            <Select defaultValue={values.m2}  style={{width: 500}} onChange={onchange}>
+            <Select style={{width: 500}} onChange={onchange}>
                 <Select.Option value={EInvMaskM2.NNOT}>0. Нет инверсии условия</Select.Option>
                 <Select.Option value={EInvMaskM2.NOT}>1. Инверсия условия</Select.Option>
                 <Select.Option value={EInvMaskM2.NNOT_MASK}>2. Нет инварсии условия(маска)</Select.Option>
@@ -33,7 +33,7 @@ const M2M3M4 = observer(({EInvMaskM2, ECondM3, EJumpM4,values}) => {
             name="m3"
             label="M3"
         >
-            <Select defaultValue={values.m3} >
+            <Select>
                 <Select.Option value={ECondM3.PSW0}>0.PSW[0]</Select.Option>
                 <Select.Option value={ECondM3.PSW1}>1.PSW[1]</Select.Option>
                 <Select.Option value={ECondM3.PSW2}>2.PSW[2]</Select.Option>
@@ -60,7 +60,7 @@ const M2M3M4 = observer(({EInvMaskM2, ECondM3, EJumpM4,values}) => {
             name="m4"
             label="M4"
         >
-            <Select defaultValue={values.m4} >
+            <Select>
                 <Select.Option value={EJumpM4.JZ}>0.Перейти на нулевой адрес(JZ)</Select.Option>
                 <Select.Option value={EJumpM4.CJS}>1.Условный переход к подпрограмме по адресу из RMK
                     (CJS)</Select.Option>
