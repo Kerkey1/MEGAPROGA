@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {observer} from "mobx-react";
-import {Col, Form, Layout, Menu, Row} from "antd";
+import {Col, Form, Input, Layout, Menu, Row} from "antd";
 import './App.css';
 import './index.css'
 import 'antd/dist/antd.css';
@@ -24,27 +24,29 @@ import {
     CaretRightOutlined,
     ClearOutlined,
     DownloadOutlined,
-    MinusSquareFilled, PlusOutlined, StepBackwardOutlined, StepForwardOutlined,
+    MinusSquareFilled, PauseOutlined, PlusOutlined, StepBackwardOutlined, StepForwardOutlined,
     UploadOutlined
 } from "@ant-design/icons";
+import InitialRegistersView from "./components/InitialRegistersView";
 
 const {Content} = Layout;
 
-let mainRom = [];
-let start_regs = [];
-let temp_regs = [];
+let mainRom = []
+let start_regs = []
+let temp_regs = []
 let regs
-mainRom[0] = new Command();
+mainRom[0] = new Command()
+let initialValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 const App = observer(() => {
 
-    let initialValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     const [form] = Form.useForm()
     const [z, setZ] = useState(0)
     const [rowSettingsVisible, setRowSettingsVisible] = useState(false)
     const [curRow, setCurRow] = useState(0)
     const [redact, setRedact] = useState(true)
     let [dataSource, setDataSource] = useState([])
+    const [tact, setTact] = useState(0)
 
     useEffect(() => {
         document.getElementById('file').addEventListener('change', onChange);
@@ -52,12 +54,12 @@ const App = observer(() => {
 
     const columns = [
         {
-            title: 'Address',
+            title: 'Адрес',
             dataIndex: 'address',
             width: '40%',
         },
         {
-            title: 'Command',
+            title: 'Команда',
             dataIndex: 'command',
             width: '40%',
             render: e => mainRom[e].Parse()
@@ -69,37 +71,45 @@ const App = observer(() => {
         const text = JSON.stringify(obj);
         const name = "sample.json";
         const type = "text/plain";
-        const a = document.createElement("a");
-        const file = new Blob([text], {type: type});
-        a.href = URL.createObjectURL(file);
-        a.download = name;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        const a = document.createElement("a")
+        const file = new Blob([text], {type: type})
+        a.href = URL.createObjectURL(file)
+        a.download = name
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
     }
 
     const setRegister = (v) => {
-        let i = 0
+        let i = z
         let temp
-        for (i; i < v.result.length; i++) {
-            temp = v.result[i]
-            temp_regs[i] = new Registers(temp)
+        if (z === 0) {
+            for (i; i < v.result.length; i++) {
+                temp = v.result[i]
+                temp_regs[i] = new Registers(temp)
+                regs = temp_regs
+            }
+        } else {
+            for (i + 1; i < v.result.length; i++) {
+                temp = v.result[i - z - 1]
+                temp_regs[i] = new Registers(temp)
+                regs = temp_regs
+            }
         }
-        regs = temp_regs
     }
 
 
     function onChange(event) {
-        let reader = new FileReader();
-        reader.onload = onReaderLoad;
-        reader.readAsText(event.target.files[0]);
+        let reader = new FileReader()
+        reader.onload = onReaderLoad
+        reader.readAsText(event.target.files[0])
     }
 
     function onReaderLoad(event) {
-        console.log(event.target.result);
-        let obj = JSON.parse(event.target.result);
+        console.log(event.target.result)
+        let obj = JSON.parse(event.target.result)
         console.log(obj.commands.length)
-        alert_data(obj.commands, obj.commands.length);
+        alert_data(obj.commands, obj.commands.length)
     }
 
     function alert_data(name, length) {
@@ -115,19 +125,16 @@ const App = observer(() => {
                 command: i,
             }
             setDataSource(pre => {
-                return [...pre, newRow];
+                return [...pre, newRow]
             })
         }
-
-
     }
 
     // ФУНКЦИИ КНОПОК
     const nextStep = () => {
-        let j = z;
-        j = j + 1;
+        let j = z
+        j = j + 1
         setZ(j)
-        Exec(regs[z], mainRom, j, 1000).then((v) => setRegister(v))
         console.log(z)
     }
 
@@ -140,9 +147,19 @@ const App = observer(() => {
         console.log(z)
     }
 
-    const stop = () => {
+    const pause = () => {
+        let temp = (regs[z].ToString()).split(',')
+        initialValues = temp.map(string => parseInt(string))
+        console.log(initialValues)
 
+        setRedact(true)
     }
+
+    const stop = () => {
+        setZ(0)
+        setRedact(true)
+    }
+
 
     const addRow = () => {
         const aLength = dataSource.length;
@@ -158,14 +175,22 @@ const App = observer(() => {
     }
 
     const startTesting = () => {
-        setRedact(false)
+        console.log(initialValues)
         start_regs = new Registers(initialValues)
-        Exec(start_regs, mainRom, z, 1000).then((v) => setRegister(v))
+        if (z > 0) {
+            regs[z] = new Registers(initialValues)
+            console.log(regs[z])
+        }
+
+        console.log(start_regs)
+        Exec(start_regs, mainRom, z, tact).then((v) => setRegister(v))
+        setRedact(false)
     }
 
     const loadCommands = () => {
         setDataSource([])
         mainRom = []
+        setZ(0)
         let temp = document.getElementById('file')
         temp.click()
     }
@@ -184,6 +209,16 @@ const App = observer(() => {
         saveJsonObjToFile(result)
     }
 
+    const clearCommands = () => {
+        setDataSource([])
+        mainRom = []
+    }
+
+    const setTactCount = (event) => {
+        setTact(event.target.value)
+        console.log(event.target.value)
+    }
+
     return <>
         <Layout>
             <Content>
@@ -196,29 +231,33 @@ const App = observer(() => {
                             inlineCollapsed={true}
                             selectable={false}
                         >
+                            <Input onChange={e => setTactCount(e)} defaultValue="0"/>
                             <Menu.Item key="0" icon={<StepForwardOutlined/>} onClick={nextStep}>
                                 Далее
                             </Menu.Item>
                             <Menu.Item key="1" icon={<StepBackwardOutlined/>} onClick={prevStep}>
-                                Далее
+                                Назад
                             </Menu.Item>
-                            <Menu.Item key="2" icon={<MinusSquareFilled/>} onClick={stop}>
+                            <Menu.Item key="2" icon={<PauseOutlined/>} onClick={pause}>
+                                Начать отладку
+                            </Menu.Item>
+                            <Menu.Item key="3" icon={<CaretRightOutlined/>} onClick={startTesting}>
+                                Начать отладку
+                            </Menu.Item>
+                            <Menu.Item key="4" icon={<MinusSquareFilled/>} onClick={stop}>
                                 Стоп
                             </Menu.Item>
-                            <Menu.Item key="3" icon={<PlusOutlined/>} onClick={addRow}>
+                            <Menu.Item key="5" icon={<PlusOutlined/>} onClick={addRow}>
                                 Добавить команду
                             </Menu.Item>
-                            <Menu.Item key="4" icon={<DownloadOutlined/>} onClick={loadCommands}>
+                            <Menu.Item key="6" icon={<DownloadOutlined/>} onClick={loadCommands}>
                                 Загрузить команды
                             </Menu.Item>
-                            <Menu.Item key="5" icon={<UploadOutlined/>} onClick={saveCommands}>
+                            <Menu.Item key="7" icon={<UploadOutlined/>} onClick={saveCommands}>
                                 Сохранить команды
                             </Menu.Item>
-                            <Menu.Item key="6" icon={<ClearOutlined/>}>
+                            <Menu.Item key="8" icon={<ClearOutlined/>} onClick={clearCommands}>
                                 Очистить команды
-                            </Menu.Item>
-                            <Menu.Item key="7" icon={<CaretRightOutlined/>} onClick={startTesting}>
-                                Начать отладку
                             </Menu.Item>
                         </Menu>
                     </Col>
@@ -235,8 +274,8 @@ const App = observer(() => {
                             z={z}
                         />
                     </Col>
-                    <Col span={17}>{initialValues &&
-                    <RegistersView reg={regs} index={z} redact={redact} initialValues={initialValues}/>}
+                    <Col span={17}>{redact ? <InitialRegistersView initialValues={initialValues}/> :
+                        <RegistersView reg={regs} index={z} redact={redact} initialValues={initialValues}/>}
                     </Col>
                 </Row>
                 <RowSettings

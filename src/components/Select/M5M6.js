@@ -9,12 +9,12 @@ const M5M6 = observer(() => {
         <Form.Item
             name="m5"
             label="M5">
-            <Input></Input>
+            <Input pattern="[0-7]{4}"/>
         </Form.Item>
         <Form.Item
             name="m6"
             label="M6">
-            <Input></Input>
+            <Input pattern="[0-7]{4}"/>
         </Form.Item>
     </>
 });
