@@ -33,9 +33,7 @@ const RowSettings = observer(({
             form.resetFields();
             checkCommands[curRow] = true;
             Rom[curRow].SetFields(data);
-            console.log(Rom[curRow]);
             setRowSettingsVisible(false);
-            console.log(checkCommands)
         });
 
         return <>

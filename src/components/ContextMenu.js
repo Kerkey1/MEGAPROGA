@@ -18,7 +18,6 @@ const ContextMenu = observer(({
         const [addressInputVisible, setAddressInputVisible] = useState(true)
         const [newReg, setNewReg] = useState()
         const onChange = e => {
-            console.log('radio checked', e.target.value)
             setValue(e.target.value)
             if (e.target.value === 1) {
                 setAddressInputVisible(true)
@@ -89,9 +88,7 @@ const ContextMenu = observer(({
                     });
                 });
 
-                console.log("нет " + newReg)
-            } else
-                console.log("сущ " + exist)
+            }
         }
 
         return <Modal

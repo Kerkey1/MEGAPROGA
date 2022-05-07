@@ -46,7 +46,11 @@ const App = observer(() => {
     const [rowContextVisible, setRowContextVisible] = useState(false)
     const [curRow, setCurRow] = useState(0)
     const [redact, setRedact] = useState(true)
-    let [dataSource, setDataSource] = useState([])
+    let [dataSource, setDataSource] = useState([{
+        key: 0,
+        address: 0,
+        command: 0
+    }])
     const [tact, setTact] = useState(0)
     const [rowIndex, setRowIndex] = useState()
 
@@ -54,11 +58,6 @@ const App = observer(() => {
         document.getElementById('file').addEventListener('change', onChange);
     }, [])
 
-    useEffect(() => {
-        console.log(dataSource)
-        console.log(mainRom)
-        console.log(checkCommands)
-    }, [dataSource])
     //Вспомогательные функции
     const saveJsonObjToFile = (obj) => {
         const text = JSON.stringify(obj);
@@ -103,10 +102,10 @@ const App = observer(() => {
         mainRom = []
         checkCommands = []
         setZ(0)
-        alert_data(obj.commands, obj.commands.length)
+        writeDataIntoTable(obj.commands, obj.commands.length)
     }
 
-    const alert_data = (name, length) => {
+    const writeDataIntoTable = (name, length) => {
         for (let i = 0; i < length; i++) {
             checkCommands[i] = true
             mainRom[i] = new Command(name[i])
@@ -121,7 +120,6 @@ const App = observer(() => {
                 return [...pre, newRow]
             })
         }
-        console.log(mainRom)
     }
 
     //Функции кнопок
@@ -154,16 +152,28 @@ const App = observer(() => {
     }
 
     const addRow = () => {
-        const aLength = dataSource.length;
-        mainRom[aLength] = new Command();
-        const newRow = {
-            key: aLength,
-            address: aLength,
-            command: aLength,
+        let maxIndex = -1;
+        let maxAddress = -1;
+
+        for (let i = 0; i < dataSource.length; i++) {
+            if (dataSource[i].key >= maxIndex)
+                maxIndex = dataSource[i].key + 1
+            if (dataSource[i].address >= maxAddress)
+                maxAddress = dataSource[i].address + 1
         }
-        setDataSource(pre => {
-            return [...pre, newRow];
-        })
+
+        if (maxAddress > -1) {
+            mainRom[maxAddress] = new Command();
+            const newRow = {
+                key: maxIndex,
+                address: maxAddress,
+                command: maxAddress,
+            }
+            setDataSource(pre => {
+                return [...pre, newRow];
+            })
+        }
+
     }
 
     const startTesting = () => {
