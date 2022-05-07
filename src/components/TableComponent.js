@@ -11,7 +11,8 @@ const TableComponent = observer(({
                                      Rom,
                                      z,
                                      checkCommands,
-                                     setRowContextVisible
+                                     setRowContextVisible,
+                                     setRowIndex
                                  }) => {
 
     const columns = [
@@ -19,7 +20,7 @@ const TableComponent = observer(({
             title: 'Адрес микрокоманды',
             dataIndex: 'address',
             width: '35%',
-            editable: true
+            render: e => e.toString(8)
         },
         {
             title: 'Команда',
@@ -28,11 +29,6 @@ const TableComponent = observer(({
             render: e => Rom[e].Parse()
         }
     ];
-
-
-    const onEdit = (record) => {
-
-    }
 
     return <>
         <Table
@@ -95,7 +91,11 @@ const TableComponent = observer(({
                         setRowSettingsVisible(true);
                     },
                     onContextMenu: event => {
-
+                        event.preventDefault()
+                        setRowIndex(parseInt(record.key, 10))
+                        setCurRow(parseInt(record.address, 10));
+                        console.log(record.key)
+                        setRowContextVisible(true)
                     },
                 };
             }}

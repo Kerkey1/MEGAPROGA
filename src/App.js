@@ -2,7 +2,6 @@
 import './App.css';
 import './index.css'
 
-
 //Импорты библиотек
 import 'antd/dist/antd.css';
 import React, {useEffect, useState} from 'react';
@@ -26,6 +25,7 @@ import RowSettings from "./components/RowSettings";
 import Registers from "./Logic/Reg";
 import Command from "./Logic/Command";
 import {Exec} from "./Funcrions/FunctionsForBack";
+import ContextMenu from "./components/ContextMenu";
 
 const {Content} = Layout;
 
@@ -48,11 +48,17 @@ const App = observer(() => {
     const [redact, setRedact] = useState(true)
     let [dataSource, setDataSource] = useState([])
     const [tact, setTact] = useState(0)
+    const [rowIndex, setRowIndex] = useState()
 
     useEffect(() => {
         document.getElementById('file').addEventListener('change', onChange);
     }, [])
 
+    useEffect(() => {
+        console.log(dataSource)
+        console.log(mainRom)
+        console.log(checkCommands)
+    }, [dataSource])
     //Вспомогательные функции
     const saveJsonObjToFile = (obj) => {
         const text = JSON.stringify(obj);
@@ -115,6 +121,7 @@ const App = observer(() => {
                 return [...pre, newRow]
             })
         }
+        console.log(mainRom)
     }
 
     //Функции кнопок
@@ -144,7 +151,6 @@ const App = observer(() => {
         regs = undefined
         temp_regs = []
         initialValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
     }
 
     const addRow = () => {
@@ -209,6 +215,7 @@ const App = observer(() => {
     }
 
     return <>
+
         <Layout>
             <Content>
                 <Row>
@@ -262,6 +269,7 @@ const App = observer(() => {
                             Rom={mainRom}
                             z={z}
                             checkCommands={checkCommands}
+                            setRowIndex={setRowIndex}
                         />
                     </Col>
                     <Col span={15}>{redact ? <InitialRegistersView initialValues={initialValues}/> :
@@ -278,6 +286,9 @@ const App = observer(() => {
                     form={form}
                 />
                 <input id="file" type="file"/>
+                <ContextMenu visible={rowContextVisible} setVisible={setRowContextVisible} curRow={curRow}
+                             dataSource={dataSource} setDataSource={setDataSource} rom={mainRom}
+                             checkCommands={checkCommands} rowIndex={rowIndex}/>
             </Content>
         </Layout>
     </>
