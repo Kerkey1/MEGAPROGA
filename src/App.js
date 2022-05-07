@@ -1,25 +1,13 @@
+//Стили проекта
+import './App.css';
+import './index.css'
+
+
+//Импорты библиотек
+import 'antd/dist/antd.css';
 import React, {useEffect, useState} from 'react';
 import {observer} from "mobx-react";
 import {Col, Form, Input, Layout, Menu, Row} from "antd";
-import './App.css';
-import './index.css'
-import 'antd/dist/antd.css';
-import TableComponent from "./components/TableComponent";
-import RowSettings from "./components/RowSettings";
-import Registers from "./Logic/Reg";
-import Command from "./Logic/Command";
-import {Exec} from "./Funcrions/FunctionsForBack";
-import RegistersView from "./components/RegistersView";
-import {
-    ECarryM8,
-    ECondM3,
-    EFuncM10, EInputM12,
-    EInvMaskM2,
-    EJumpM4,
-    EOperandsM9,
-    EOutputM14, EPswM13, EResultM11,
-    EShiftControlM7, states
-} from "./Consts/ConstM";
 import {
     CaretRightOutlined,
     ClearOutlined,
@@ -27,13 +15,25 @@ import {
     MinusSquareFilled, PauseOutlined, PlusOutlined, StepBackwardOutlined, StepForwardOutlined,
     UploadOutlined
 } from "@ant-design/icons";
+
+//Компоненты
+import RegistersView from "./components/RegistersView";
 import InitialRegistersView from "./components/InitialRegistersView";
+import TableComponent from "./components/TableComponent";
+import RowSettings from "./components/RowSettings";
+
+//Функции
+import Registers from "./Logic/Reg";
+import Command from "./Logic/Command";
+import {Exec} from "./Funcrions/FunctionsForBack";
 
 const {Content} = Layout;
 
+//Рабочие переменные вне ререндера
 let mainRom = []
 let start_regs = []
 let temp_regs = []
+let checkCommands = []
 let regs
 mainRom[0] = new Command()
 let initialValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -43,6 +43,7 @@ const App = observer(() => {
     const [form] = Form.useForm()
     const [z, setZ] = useState(0)
     const [rowSettingsVisible, setRowSettingsVisible] = useState(false)
+    const [rowContextVisible, setRowContextVisible] = useState(false)
     const [curRow, setCurRow] = useState(0)
     const [redact, setRedact] = useState(true)
     let [dataSource, setDataSource] = useState([])
@@ -52,21 +53,7 @@ const App = observer(() => {
         document.getElementById('file').addEventListener('change', onChange);
     }, [])
 
-    const columns = [
-        {
-            title: 'Адрес',
-            dataIndex: 'address',
-            width: '40%',
-        },
-        {
-            title: 'Команда',
-            dataIndex: 'command',
-            width: '40%',
-            render: e => mainRom[e].Parse()
-        }
-    ];
-
-    // ВСПОМОГАТЕЛЬНЫЕ
+    //Вспомогательные функции
     const saveJsonObjToFile = (obj) => {
         const text = JSON.stringify(obj);
         const name = "sample.json";
@@ -87,37 +74,37 @@ const App = observer(() => {
             for (i; i < v.result.length; i++) {
                 temp = v.result[i]
                 temp_regs[i] = new Registers(temp)
-                regs = temp_regs
             }
+            regs = temp_regs
         } else {
             for (i + 1; i < v.result.length; i++) {
                 temp = v.result[i - z - 1]
                 temp_regs[i] = new Registers(temp)
-                regs = temp_regs
             }
+            regs = temp_regs
         }
     }
 
-
-    function onChange(event) {
+    const onChange = (event) => {
         let reader = new FileReader()
         reader.onload = onReaderLoad
         reader.readAsText(event.target.files[0])
     }
 
-    function onReaderLoad(event) {
-        console.log(event.target.result)
+    const onReaderLoad = (event) => {
         let obj = JSON.parse(event.target.result)
-        console.log(obj.commands.length)
+        setDataSource([])
+        mainRom = []
+        checkCommands = []
+        setZ(0)
         alert_data(obj.commands, obj.commands.length)
     }
 
-    function alert_data(name, length) {
+    const alert_data = (name, length) => {
         for (let i = 0; i < length; i++) {
+            checkCommands[i] = true
             mainRom[i] = new Command(name[i])
-            console.log(mainRom[i].Parse())
         }
-        console.log(mainRom)
         for (let i = 0; i < length; i++) {
             let newRow = {
                 key: i,
@@ -130,12 +117,11 @@ const App = observer(() => {
         }
     }
 
-    // ФУНКЦИИ КНОПОК
+    //Функции кнопок
     const nextStep = () => {
         let j = z
         j = j + 1
         setZ(j)
-        console.log(z)
     }
 
     const prevStep = () => {
@@ -144,22 +130,22 @@ const App = observer(() => {
             j = j - 1;
             setZ(j)
         }
-        console.log(z)
     }
 
     const pause = () => {
         let temp = (regs[z].ToString()).split(',')
         initialValues = temp.map(string => parseInt(string))
-        console.log(initialValues)
-
         setRedact(true)
     }
 
     const stop = () => {
         setZ(0)
         setRedact(true)
-    }
+        regs = undefined
+        temp_regs = []
+        initialValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
+    }
 
     const addRow = () => {
         const aLength = dataSource.length;
@@ -175,22 +161,19 @@ const App = observer(() => {
     }
 
     const startTesting = () => {
-        console.log(initialValues)
         start_regs = new Registers(initialValues)
-        if (z > 0) {
-            regs[z] = new Registers(initialValues)
-            console.log(regs[z])
-        }
+        if (z === 0) {
+            Exec(start_regs, mainRom, z, tact)
+                .then((v) => setRegister(v))
+                .then(() => setRedact(false))
+        } else {
+            Exec(start_regs, mainRom, z, tact).then((v) => setRegister(v))
+                .then(() => regs[z] = new Registers(initialValues)).then(() => setRedact(false))
 
-        console.log(start_regs)
-        Exec(start_regs, mainRom, z, tact).then((v) => setRegister(v))
-        setRedact(false)
+        }
     }
 
     const loadCommands = () => {
-        setDataSource([])
-        mainRom = []
-        setZ(0)
         let temp = document.getElementById('file')
         temp.click()
     }
@@ -211,19 +194,26 @@ const App = observer(() => {
 
     const clearCommands = () => {
         setDataSource([])
+        checkCommands = []
         mainRom = []
+        regs = undefined
+        temp_regs = []
+        setZ(0)
+        mainRom[0] = new Command()
+        setRedact(true)
+        initialValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     }
 
     const setTactCount = (event) => {
         setTact(event.target.value)
-        console.log(event.target.value)
     }
 
     return <>
         <Layout>
             <Content>
                 <Row>
-                    <Col span={1}>
+                    <Col span={2}>
+                        <Input onChange={e => setTactCount(e)} placeholder="количество тактов"/>
                         <Menu
                             mode="inline"
                             theme="dark"
@@ -231,7 +221,6 @@ const App = observer(() => {
                             inlineCollapsed={true}
                             selectable={false}
                         >
-                            <Input onChange={e => setTactCount(e)} defaultValue="0"/>
                             <Menu.Item key="0" icon={<StepForwardOutlined/>} onClick={nextStep}>
                                 Далее
                             </Menu.Item>
@@ -239,7 +228,7 @@ const App = observer(() => {
                                 Назад
                             </Menu.Item>
                             <Menu.Item key="2" icon={<PauseOutlined/>} onClick={pause}>
-                                Начать отладку
+                                Пауза
                             </Menu.Item>
                             <Menu.Item key="3" icon={<CaretRightOutlined/>} onClick={startTesting}>
                                 Начать отладку
@@ -261,40 +250,31 @@ const App = observer(() => {
                             </Menu.Item>
                         </Menu>
                     </Col>
-                    <Col span={6}>
+                    <Col span={7}>
                         <TableComponent
                             setRowSettingsVisible={setRowSettingsVisible}
+                            setRowContextVisible={setRowContextVisible}
                             setCurRow={setCurRow}
                             dataSource={dataSource}
-                            columns={columns}
                             addRow={addRow}
                             form={form}
                             data={regs}
                             Rom={mainRom}
                             z={z}
+                            checkCommands={checkCommands}
                         />
                     </Col>
-                    <Col span={17}>{redact ? <InitialRegistersView initialValues={initialValues}/> :
-                        <RegistersView reg={regs} index={z} redact={redact} initialValues={initialValues}/>}
+                    <Col span={15}>{redact ? <InitialRegistersView initialValues={initialValues}/> :
+                        regs && <RegistersView reg={regs} index={z} redact={redact} initialValues={initialValues}/>}
                     </Col>
                 </Row>
                 <RowSettings
                     rowSettingsVisible={rowSettingsVisible}
                     setRowSettingsVisible={setRowSettingsVisible}
                     curRow={curRow}
-                    EInvMaskM2={EInvMaskM2}
-                    ECondM3={ECondM3}
-                    EJumpM4={EJumpM4}
-                    EShiftControlM7={EShiftControlM7}
-                    ECarryM8={ECarryM8}
-                    EOperandsM9={EOperandsM9}
-                    EFuncM10={EFuncM10}
-                    EResultM11={EResultM11}
-                    EInputM12={EInputM12}
-                    EPswM13={EPswM13}
-                    EOutputM14={EOutputM14}
                     Rom={mainRom}
                     dataSource={dataSource}
+                    checkCommands={checkCommands}
                     form={form}
                 />
                 <input id="file" type="file"/>

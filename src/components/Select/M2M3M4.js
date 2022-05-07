@@ -1,35 +1,59 @@
 import {observer} from "mobx-react";
-import {Form, Input, Select} from "antd";
-import React, {useEffect, useState} from "react";
-import M3Mask from "./M3Mask";
-import M3 from "./M3";
+import {Form, Select} from "antd";
+import React, {useState} from "react";
+import {
+    ECondM3,
+    EInvMaskM2,
+    EJumpM4,
+} from "../../Consts/ConstM";
 
+const M2M3M4 = observer(() => {
 
-const M2M3M4 = observer(({EInvMaskM2, ECondM3, EJumpM4}) => {
+    const [isMasked, setMasked] = useState(false)
 
-    const [check, setCheck] = useState(true);
-
-    // const onchange = () => {
-    //     let test;
-    //     test = form.getFieldValue.m2;
-    //     if (test === EInvMaskM2.NNOT || test === EInvMaskM2.NOT) {
-    //         setCheck(true);
-    //     } else setCheck(false);
-    // };
+    const checkMask = (e) => {
+        if (e === 0 || e === 1) {
+            setMasked(false)
+        } else {
+            setMasked(true)
+        }
+    }
 
     return <>
         <Form.Item
             name="m2"
             label="M2"
         >
-            <Select style={{width: 500}} onChange={onchange}>
+            <Select style={{width: 500}} onChange={checkMask}>
                 <Select.Option value={EInvMaskM2.NNOT}>0. Нет инверсии условия</Select.Option>
                 <Select.Option value={EInvMaskM2.NOT}>1. Инверсия условия</Select.Option>
                 <Select.Option value={EInvMaskM2.NNOT_MASK}>2. Нет инварсии условия(маска)</Select.Option>
                 <Select.Option value={EInvMaskM2.NOT_MASK}>3. Инверсия условия(маска)</Select.Option>
             </Select>
         </Form.Item>
-        <Form.Item
+        {isMasked ? <Form.Item
+            name="m3"
+            label="M3"
+        >
+            <Select>
+                <Select.Option value={ECondM3.PSW0}>0.PSW[0]</Select.Option>
+                <Select.Option value={ECondM3.PSW1}>1.PSW[1]</Select.Option>
+                <Select.Option value={ECondM3.PSW2}>2.PSW[2]</Select.Option>
+                <Select.Option value={ECondM3.PSW3}>3.PSW[3]</Select.Option>
+                <Select.Option value={ECondM3.PSW4}>4.PSW[4]</Select.Option>
+                <Select.Option value={ECondM3.PSW5}>5.PSW[5]</Select.Option>
+                <Select.Option value={ECondM3.CT}>6.Перенос СТ</Select.Option>
+                <Select.Option value={ECondM3.CONSTZ}>7.Константа 0</Select.Option>
+                <Select.Option value={ECondM3.LV1}>8.УР.1</Select.Option>
+                <Select.Option value={ECondM3.LV21}>9.УР2.1</Select.Option>
+                <Select.Option value={ECondM3.LV22}>10.УР2.2</Select.Option>
+                <Select.Option value={ECondM3.LV3}>11.УР3</Select.Option>
+                <Select.Option value={ECondM3.LV4}>12.УР4</Select.Option>
+                <Select.Option value={ECondM3.LV5}>13.УР5</Select.Option>
+                <Select.Option value={ECondM3.RK119}>14.RK[11/9]=0</Select.Option>
+                <Select.Option value={ECondM3.RK53}>15.RK[5/3]=0</Select.Option>
+            </Select>
+        </Form.Item> : <Form.Item
             name="m3"
             label="M3"
         >
@@ -51,11 +75,8 @@ const M2M3M4 = observer(({EInvMaskM2, ECondM3, EJumpM4}) => {
                 <Select.Option value={ECondM3.FLG6}>14.FLG[6]</Select.Option>
                 <Select.Option value={ECondM3.FLG7}>15.FLG[7]</Select.Option>
             </Select>
-            {/*{check ?*/}
-            {/*    <M3 ECondM3={ECondM3}/> :*/}
-            {/*    <M3Mask ECondM3={ECondM3}/>*/}
-            {/*}*/}
-        </Form.Item>
+        </Form.Item>}
+
         <Form.Item
             name="m4"
             label="M4"

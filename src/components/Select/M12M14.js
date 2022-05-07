@@ -1,9 +1,10 @@
 import {observer} from "mobx-react";
 import {Form, Select} from "antd";
 import React from "react";
+import {EInputM12, EOutputM14} from "../../Consts/ConstM";
 
 
-const M12M14 = observer(({EInputM12, EOutputM14}) => {
+const M12M14 = observer(() => {
 
 
     return <>

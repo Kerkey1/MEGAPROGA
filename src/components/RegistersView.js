@@ -6,7 +6,7 @@ import '../App.css';
 const RegistersView = observer(({reg, index}) => {
 
     return <>
-        {reg && <Row className="classForRegisters">
+        <Row className="classForRegisters">
             <Input addonBefore="R0" disabled="true" value={reg[index].R[0].toString(8)} defaultValue="0"/>
             <Input addonBefore="R1" disabled="true" value={reg[index].R[1].toString(8)} defaultValue="0"/>
             <Input addonBefore="R2" disabled="true" value={reg[index].R[2].toString(8)} defaultValue="0"/>
@@ -38,7 +38,7 @@ const RegistersView = observer(({reg, index}) => {
             <Input addonBefore="FLG" disabled="true" value={reg[index].FLG.toString(8)} defaultValue="0"/>
             <Input addonBefore="PSW" disabled="true" value={reg[index].PSW.toString(8)} defaultValue="0"/>
             <Input addonBefore="Z0" disabled="true" value={reg[index].ZO.toString(8)} defaultValue="0"/>
-        </Row>}
+        </Row>
 
     </>
 });

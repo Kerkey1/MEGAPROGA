@@ -1,9 +1,10 @@
 import {observer} from "mobx-react";
 import {Form, Input, Select} from "antd";
 import React from "react";
+import {EPswM13} from "../../Consts/ConstM";
 
 
-const M13 = observer(({EPswM13}) => {
+const M13 = observer(() => {
 
     return <>
         <Form.Item

@@ -1,9 +1,10 @@
 import {observer} from "mobx-react";
-import {Form, Input, Select} from "antd";
+import {Form, Select} from "antd";
 import React from "react";
+import {ECarryM8, EFuncM10, EOperandsM9, EShiftControlM7} from "../../Consts/ConstM";
 
 
-const M7M8M9M10 = observer(({EShiftControlM7, ECarryM8, EOperandsM9, EFuncM10}) => {
+const M7M8M9M10 = observer(() => {
 
     return <>
         <Form.Item

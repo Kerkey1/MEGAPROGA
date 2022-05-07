@@ -6,15 +6,37 @@ const TableComponent = observer(({
                                      setRowSettingsVisible,
                                      setCurRow,
                                      dataSource,
-                                     columns,
                                      data,
                                      form,
                                      Rom,
-                                     z
+                                     z,
+                                     checkCommands,
+                                     setRowContextVisible
                                  }) => {
+
+    const columns = [
+        {
+            title: 'Адрес микрокоманды',
+            dataIndex: 'address',
+            width: '35%',
+            editable: true
+        },
+        {
+            title: 'Команда',
+            dataIndex: 'command',
+            width: '65%',
+            render: e => Rom[e].Parse()
+        }
+    ];
+
+
+    const onEdit = (record) => {
+
+    }
 
     return <>
         <Table
+            bordered
             scroll={{y: 800}}
             pagination={false}
             dataSource={dataSource}
@@ -33,7 +55,7 @@ const TableComponent = observer(({
                 return {
                     onDoubleClick: event => {
                         setCurRow(parseInt(record.address, 10));
-                        if (Rom[record.address] === undefined) {
+                        if (checkCommands[record.address] === undefined) {
                             form.setFieldsValue({
                                 m1: 0,
                                 m2: 0,
@@ -70,8 +92,10 @@ const TableComponent = observer(({
                                 m15: Rom[record.address].fields[14]
                             })
                         }
-
                         setRowSettingsVisible(true);
+                    },
+                    onContextMenu: event => {
+
                     },
                 };
             }}

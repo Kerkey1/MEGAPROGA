@@ -14,38 +14,9 @@ const RowSettings = observer(({
                                   setRowSettingsVisible,
                                   curRow,
                                   Rom,
-                                  EInvMaskM2,
-                                  ECondM3,
-                                  EJumpM4,
-                                  EShiftControlM7,
-                                  ECarryM8,
-                                  EOperandsM9,
-                                  EFuncM10,
-                                  EResultM11,
-                                  EInputM12,
-                                  EPswM13,
-                                  EOutputM14,
                                   form,
+                                  checkCommands
                               }) => {
-
-
-        let initialValue = {
-            m1: 0,
-            m2: 0,
-            m3: 0,
-            m4: 16,
-            m5: 0,
-            m6: 0,
-            m7: 0,
-            m8: 0,
-            m9: 7,
-            m10: 0,
-            m11: 3,
-            m12: 0,
-            m13: 0,
-            m14: 2,
-            m15: 0
-        }
 
         const onCancel = (() => {
             form.resetFields();
@@ -60,9 +31,11 @@ const RowSettings = observer(({
             data.m15 = parseInt(data.m15, 10);
 
             form.resetFields();
+            checkCommands[curRow] = true;
             Rom[curRow].SetFields(data);
             console.log(Rom[curRow]);
             setRowSettingsVisible(false);
+            console.log(checkCommands)
         });
 
         return <>
@@ -79,7 +52,6 @@ const RowSettings = observer(({
                     form={form}
                     layout="vertical"
                     name="form"
-                    initialValues={initialValue}
                     wrapperCol={{
                         span: 50,
                     }}
@@ -87,7 +59,7 @@ const RowSettings = observer(({
                     <Row justify="center">
                         <Col>
                             Входная и выходные шины
-                            <M12M14 EInputM12={EInputM12} EOutputM14={EOutputM14}/>
+                            <M12M14/>
                         </Col>
                         <Divider type="vertical" style={{height: "200px", backgroundColor: "#000"}}/>
                         <Col>
@@ -96,13 +68,33 @@ const RowSettings = observer(({
                         </Col>
                         <Divider type="vertical" style={{height: "200px", backgroundColor: "#000"}}/>
                         <Col style={{width: "500px"}}>
-                            Приёмник результата
-                            <M11 EResultM11={EResultM11}/>
+                            Приёмник результата М11
+                            <Row className="rowM11">
+                                <Col className="colM11">
+                                    <Row className="rowM11-1">ROH</Row>
+                                    <Row className="rowM11-2">
+                                        <Col>Сдвиг</Col>
+                                        <Col>Загрузка</Col>
+                                    </Row>
+                                </Col>
+                                <Col className="colM11">
+                                    <Row className="rowM11-1">RQ</Row>
+                                    <Row className="rowM11-2">
+                                        <Col>Сдвиг</Col>
+                                        <Col>Загрузка</Col>
+                                    </Row>
+                                </Col>
+                                <Col>
+                                    <Row className="rowM11-1">Выход</Row>
+                                    <Row className="rowM11-1">Y</Row>
+                                </Col>
+                            </Row>
+                            <M11/>
                         </Col>
                         <Divider type="vertical" style={{height: "200px", backgroundColor: "#000"}}/>
                         <Col>
                             Формирование PSW
-                            <M13 EPswM13={EPswM13}/>
+                            <M13/>
                         </Col>
                         <Divider type="vertical" style={{height: "200px", backgroundColor: "#000"}}/>
                         <Col>
@@ -111,17 +103,16 @@ const RowSettings = observer(({
                         </Col>
                     </Row>
                     <Divider type="horizontal" className="divider-horizontal"
-                             style={{width: "100vw", backgroundColor: "#000", margin: "0px"}}/>
+                             style={{width: "100%", backgroundColor: "#000", margin: "0px"}}/>
                     <Row justify="center">
                         <Col>
                             Переходы и условия переходов
-                            <M2M3M4 EInvMaskM2={EInvMaskM2} ECondM3={ECondM3} EJumpM4={EJumpM4} form={form}/>
+                            <M2M3M4/>
                         </Col>
                         <Divider type="vertical" style={{height: "400px", backgroundColor: "#000"}}/>
                         <Col>
                             Операции над данными
-                            <M7M8M9M10 EShiftControlM7={EShiftControlM7} ECarryM8={ECarryM8} EOperandsM9={EOperandsM9}
-                                       EFuncM10={EFuncM10}/>
+                            <M7M8M9M10/>
                         </Col>
                     </Row>
                 </Form>
