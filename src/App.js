@@ -209,7 +209,12 @@ const App = observer(() => {
     }
 
     const clearCommands = () => {
-        setDataSource([])
+        const newRow = {
+            key: 0,
+            address: 0,
+            command: 0,
+        }
+
         checkCommands = []
         mainRom = []
         regs = undefined
@@ -218,6 +223,7 @@ const App = observer(() => {
         mainRom[0] = new Command()
         setRedact(true)
         initialValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        setDataSource([newRow])
     }
 
     const setTactCount = (event) => {
