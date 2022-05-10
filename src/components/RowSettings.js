@@ -25,15 +25,16 @@ const RowSettings = observer(({
 
         const onOk = (() => {
             let data = form.getFieldsValue();
-            data.m1 = parseInt(data.m1, 10);
+            data.m1 = parseInt(data.m1, 8);
             data.m5 = parseInt(data.m5, 2);
             data.m6 = parseInt(data.m6, 2);
-            data.m15 = parseInt(data.m15, 10);
+            data.m15 = parseInt(data.m15, 8);
 
             form.resetFields();
             checkCommands[curRow] = true;
             Rom[curRow].SetFields(data);
             setRowSettingsVisible(false);
+            console.log(Rom)
         });
 
         return <>

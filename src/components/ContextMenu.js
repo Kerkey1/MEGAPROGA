@@ -92,6 +92,8 @@ const ContextMenu = observer(({
         }
 
         return <Modal
+            okText="Сохранить"
+            cancelText="Отмена"
             visible={visible}
             onCancel={onCancel}
             onOk={onOk}

@@ -72,7 +72,7 @@ const TableComponent = observer(({
                                 })
                             } else {
                                 form.setFieldsValue({
-                                    m1: Rom[record.address].fields[0],
+                                    m1: Rom[record.address].fields[0].toString(8),
                                     m2: Rom[record.address].fields[1],
                                     m3: Rom[record.address].fields[2],
                                     m4: Rom[record.address].fields[3],
@@ -86,10 +86,11 @@ const TableComponent = observer(({
                                     m12: Rom[record.address].fields[11],
                                     m13: Rom[record.address].fields[12],
                                     m14: Rom[record.address].fields[13],
-                                    m15: Rom[record.address].fields[14]
+                                    m15: Rom[record.address].fields[14].toString(8)
                                 })
                             }
                             setRowSettingsVisible(true);
+                            console.log(Rom)
                         }
                     },
                     onContextMenu: event => {

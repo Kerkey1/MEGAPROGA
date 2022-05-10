@@ -39,7 +39,6 @@ mainRom[0] = new Command()
 let initialValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 const App = observer(() => {
-
     const [form] = Form.useForm()
     const [z, setZ] = useState(0)
     const [rowSettingsVisible, setRowSettingsVisible] = useState(false)
@@ -173,7 +172,6 @@ const App = observer(() => {
                 return [...pre, newRow];
             })
         }
-
     }
 
     const startTesting = () => {
@@ -185,7 +183,6 @@ const App = observer(() => {
         } else {
             Exec(start_regs, mainRom, z, tact).then((v) => setRegister(v))
                 .then(() => regs[z] = new Registers(initialValues)).then(() => setRedact(false))
-
         }
     }
 
