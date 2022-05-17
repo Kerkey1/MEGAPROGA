@@ -48,6 +48,7 @@ const RowSettings = observer(({
                 onOk={onOk}
             >
                 <Form
+                    style={{border:"1px solid black"}}
                     form={form}
                     layout="vertical"
                     name="form"

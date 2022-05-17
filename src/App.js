@@ -107,7 +107,7 @@ const App = observer(() => {
     const writeDataIntoTable = (name, length) => {
         for (let i = 0; i < length; i++) {
             checkCommands[i] = true
-            mainRom[i] = new Command(name[i])
+            mainRom[i] = new Command(BigInt(name[i]))
         }
         for (let i = 0; i < length; i++) {
             let newRow = {
@@ -129,6 +129,7 @@ const App = observer(() => {
     }
 
     const prevStep = () => {
+
         if (z > 0) {
             let j = z;
             j = j - 1;
@@ -192,16 +193,14 @@ const App = observer(() => {
     }
 
     const saveCommands = () => {
-        let temp = []
-        for (let i = 0; i < mainRom.length; i++) {
-            if (i === 0)
-                temp += mainRom[i].Raw()
-            else
-                temp += "," + mainRom[i].Raw()
-        }
         let result = {
-            commands: [temp]
+            commands: []
         }
+
+        for (let i = 0; i < mainRom.length; i++) {
+            result.commands.push(mainRom[i].Raw().toString())
+        }
+
         saveJsonObjToFile(result)
     }
 
@@ -241,16 +240,16 @@ const App = observer(() => {
                             inlineCollapsed={true}
                             selectable={false}
                         >
-                            <Menu.Item key="0" icon={<StepForwardOutlined/>} onClick={nextStep}>
+                            <Menu.Item key="0" icon={<StepForwardOutlined/>} disabled={redact} onClick={nextStep}>
                                 Далее
                             </Menu.Item>
-                            <Menu.Item key="1" icon={<StepBackwardOutlined/>} onClick={prevStep}>
+                            <Menu.Item key="1" icon={<StepBackwardOutlined/>} disabled={redact} onClick={prevStep}>
                                 Назад
                             </Menu.Item>
-                            <Menu.Item key="2" icon={<PauseOutlined/>} onClick={pause}>
+                            <Menu.Item key="2" icon={<PauseOutlined/>} disabled={redact} onClick={pause}>
                                 Пауза
                             </Menu.Item>
-                            <Menu.Item key="3" icon={<CaretRightOutlined/>} onClick={startTesting}>
+                            <Menu.Item key="3" icon={<CaretRightOutlined/>} disabled={!redact} onClick={startTesting}>
                                 Начать отладку
                             </Menu.Item>
                             <Menu.Item key="4" icon={<MinusSquareFilled/>} onClick={stop}>

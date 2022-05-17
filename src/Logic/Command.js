@@ -154,7 +154,7 @@ export default function Command(arg1){
         this.fields[13] = obj.m14;
         this.fields[14] = obj.m15;
     }
-    if (typeof arg1 === 'number') {
+    if (typeof arg1 === 'number' || typeof arg1 === 'bigint') {
         for (let i = 0; i < 15; i++) {
             this.fields[i] = GetM(arg1, i + 1);
         }
