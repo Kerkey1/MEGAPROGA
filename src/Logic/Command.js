@@ -221,6 +221,10 @@ export default function Command(arg1){
                 str += "ZI -> D; BI -> RDI";
                 D = "ZI";
                 break;
+            case EInputM12.RDID_BIRDI_BIRK:
+                str += "ZI -> D; BI -> RDI; BI -> RK";
+                D = "ZI";
+                break;
         }
         const GetOpAddr = function (i) {
             if (!(M[i]&0b10000)) {
