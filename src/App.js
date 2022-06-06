@@ -110,14 +110,17 @@ const App = observer(() => {
             mainRom[i] = new Command(BigInt(name[i]))
         }
         for (let i = 0; i < length; i++) {
+            console.log(mainRom[i].Raw().toString())
             let newRow = {
                 key: i,
                 address: i,
                 command: i,
             }
-            setDataSource(pre => {
-                return [...pre, newRow]
-            })
+            if (i > 0 && mainRom[i].Raw().toString() !== "0") {
+                setDataSource(pre => {
+                    return [...pre, newRow]
+                })
+            }
         }
     }
 
@@ -129,7 +132,6 @@ const App = observer(() => {
     }
 
     const prevStep = () => {
-
         if (z > 0) {
             let j = z;
             j = j - 1;
@@ -196,10 +198,13 @@ const App = observer(() => {
         let result = {
             commands: []
         }
-
         for (let i = 0; i < mainRom.length; i++) {
+            if (!mainRom[i])
+                mainRom[i] = new Command(0)
             result.commands.push(mainRom[i].Raw().toString())
         }
+
+        console.log(mainRom)
 
         saveJsonObjToFile(result)
     }
