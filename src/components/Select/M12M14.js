@@ -13,7 +13,7 @@ const M12M14 = observer(() => {
             label="M12"
         >
             <Select style={{width: 250}}>
-                <Select.Option value={EInputM12.RDID}>0.RDI-->D;BI-->RDI</Select.Option>
+                <Select.Option value={EInputM12.RDID}>0.RDI-->D</Select.Option>
                 <Select.Option value={EInputM12.ZID}>1.ZI-->D</Select.Option>
                 <Select.Option value={EInputM12.M1D}>2.M1-->D</Select.Option>
                 <Select.Option value={EInputM12.PSWD}>3.PSW-->D</Select.Option>

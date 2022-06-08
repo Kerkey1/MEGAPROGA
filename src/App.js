@@ -116,7 +116,7 @@ const App = observer(() => {
                 address: i,
                 command: i,
             }
-            if (i > 0 && mainRom[i].Raw().toString() !== "0") {
+            if (i === 0 || mainRom[i].Raw().toString() !== "0") {
                 setDataSource(pre => {
                     return [...pre, newRow]
                 })
