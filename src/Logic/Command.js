@@ -136,7 +136,7 @@ const EOutputM14 = {
 };
 
 export default function Command(arg1) {
-    this.fields = new Int16Array(15);
+    this.fields = new Uint16Array(15);
     this.SetFields = function (obj) {
         this.fields[0] = obj.m1;
         this.fields[1] = obj.m2;
