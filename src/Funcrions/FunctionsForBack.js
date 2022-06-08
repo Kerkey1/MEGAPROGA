@@ -8,8 +8,21 @@ const RomToString = function (rom) {
     return str;
 }
 
+const GetCgiScriptForPlatform = function(){
+    names = {
+        Windows: "win_K1804",
+        Linux: "linux_K1804"
+    }
+    for (key of Object.keys(names)){
+        if(navigator.userAgent.includes(key)){
+            return names[key];
+        }
+    }
+    throw "Undefined platform"
+}
+
 export const Exec = async function (curent_state, rom, cmd_index, tact_count) {
-    let response = await fetch('cgi-bin/K1804', {
+    let response = await fetch('cgi-bin/'+GetCgiScriptForPlatform(), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/text;charset=utf-8'
