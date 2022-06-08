@@ -230,9 +230,9 @@ export default function Command(arg1){
             if (!(M[i]&0b10000)) {
                 return M[i];
             } else if ((M[i]&0b10000) && !(M[i]&0b01000)) {
-                return M[i] & 0b01111;
+                return "RK[0/2]";
             } else if ((M[i]&0b10000) && (M[i]&0b01000)) {
-                return M[i] & 0b00111;
+                return "RK[8/6]";
             }
         }
 
