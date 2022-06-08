@@ -214,21 +214,21 @@ export default function Command(arg1){
                 D = "RDI";
                 break;
             case EInputM12.ZID:
-                str += "ZI -> D";
+                str += "ZI -> D\n";
                 D = "ZI";
                 break;
             case EInputM12.ZID_BIRDI:
-                str += "ZI -> D; BI -> RDI";
+                str += "ZI -> D; BI -> RDI\n";
                 D = "ZI";
                 break;
             case EInputM12.RDID_BIRDI_BIRK:
-                str += "ZI -> D; BI -> RDI; BI -> RK";
-                D = "ZI";
+                str += "RDI -> D; BI -> RDI; BI -> RK\n";
+                D = "RDI";
                 break;
         }
         const GetOpAddr = function (i) {
             if (!(M[i]&0b10000)) {
-                return M[i];
+                return "R"+M[i];
             } else if ((M[i]&0b10000) && !(M[i]&0b01000)) {
                 return "RK[0/2]";
             } else if ((M[i]&0b10000) && (M[i]&0b01000)) {
@@ -240,15 +240,15 @@ export default function Command(arg1){
         let A = GetOpAddr(4), B = GetOpAddr(5);
         switch (M[8]) {
             case EOperandsM9.AB:
-                operands[0] = "R" + A;
-                operands[1] = "R" + B;
+                operands[0] = A;
+                operands[1] = B;
                 break;
             case EOperandsM9.AQ:
-                operands[0] = "R" + A;
+                operands[0] = A;
                 operands[1] = "Q";
                 break;
             case EOperandsM9.DA:
-                operands[0] = "R" + A;
+                operands[0] = A;
                 operands[1] = D;
                 break;
             case EOperandsM9.DQ:
@@ -261,11 +261,11 @@ export default function Command(arg1){
                 break;
             case EOperandsM9.ZA:
                 operands[0] = "0";
-                operands[1] = "R" + A;
+                operands[1] = A;
                 break;
             case EOperandsM9.ZB:
                 operands[0] = "0";
-                operands[1] = "R" + B;
+                operands[1] = B;
                 break;
             case EOperandsM9.ZQ:
                 operands[0] = "0";
@@ -376,11 +376,5 @@ export default function Command(arg1){
         str += "M1: " + M[0].toString(8) + "; M15: " + M[14].toString(8);
 
         return (<p style={{whiteSpace: 'pre'}}>{str}</p>);
-    }
-    this.ToJson = function () {
-        //TODO
-        const M = this.fields;
-        let obj = {};
-        obj.consts = {M1: M[0], M15: M[14]};
     }
 }
