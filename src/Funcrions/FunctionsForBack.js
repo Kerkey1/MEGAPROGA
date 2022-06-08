@@ -9,11 +9,11 @@ const RomToString = function (rom) {
 }
 
 const GetCgiScriptForPlatform = function(){
-    names = {
+    const names = {
         Windows: "win_K1804",
         Linux: "linux_K1804"
     }
-    for (key of Object.keys(names)){
+    for (let key of Object.keys(names)){
         if(navigator.userAgent.includes(key)){
             return names[key];
         }
