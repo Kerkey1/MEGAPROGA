@@ -135,7 +135,7 @@ const EOutputM14 = {
     YMAR: 2
 };
 
-export default function Command(arg1){
+export default function Command(arg1) {
     this.fields = new Int16Array(15);
     this.SetFields = function (obj) {
         this.fields[0] = obj.m1;
@@ -227,11 +227,11 @@ export default function Command(arg1){
                 break;
         }
         const GetOpAddr = function (i) {
-            if (!(M[i]&0b10000)) {
-                return "R"+M[i];
-            } else if ((M[i]&0b10000) && !(M[i]&0b01000)) {
+            if (!(M[i] & 0b10000)) {
+                return "R" + M[i];
+            } else if ((M[i] & 0b10000) && !(M[i] & 0b01000)) {
                 return "RK[0/2]";
-            } else if ((M[i]&0b10000) && (M[i]&0b01000)) {
+            } else if ((M[i] & 0b10000) && (M[i] & 0b01000)) {
                 return "RK[8/6]";
             }
         }
@@ -311,24 +311,25 @@ export default function Command(arg1){
             case EResultM11.NOP:
                 str += operation + "\n";
                 break;
-            case EResultM11.FBA: case EResultM11.FBF:
-                str += "R" + B + "<- " + operation + "\n";
+            case EResultM11.FBA:
+            case EResultM11.FBF:
+                str += B + "<- " + operation + "\n";
                 break;
             case EResultM11.FQ:
                 str += "Q" + "<- " + operation + "\n";
                 break;
             case EResultM11.LSH_BF:
-                str += "R" + B + "<- " + "2*(" + operation + ")" + "\n";
+                str += B + "<- " + "2*(" + operation + ")" + "\n";
                 break;
             case EResultM11.LSH_BFQ:
-                str += "R" + B + "<- " + "2*(" + operation + ")" + "; ";
+                str += B + "<- " + "2*(" + operation + ")" + "; ";
                 str += "Q" + "<- " + "2*(" + operation + ")" + "\n";
                 break;
             case EResultM11.RSH_FB:
-                str += "R" + B + "<- " + "(" + operation + ")\\2" + "\n";
+                str += B + "<- " + "(" + operation + ")\\2" + "\n";
                 break;
             case EResultM11.RSH_FBQ:
-                str += "R" + B + "<- " + "(" + operation + ")\\2" + "; ";
+                str += B + "<- " + "(" + operation + ")\\2" + "; ";
                 str += "Q" + "<- " + "(" + operation + ")\\2" + "\n";
                 break;
         }
@@ -347,7 +348,8 @@ export default function Command(arg1){
                 break;
         }
         switch (M[13]) {
-            case 0: case 3:
+            case 0:
+            case 3:
                 str += "NOP\n"
                 break;
             case EOutputM14.YRDO:
@@ -362,10 +364,10 @@ export default function Command(arg1){
             "RFCT", "RPCT", "CRTN", "CJPP", "LDCT", "LOOP", "CONT", "JP",
         ];
         const condition_strs = [
-            ["PSW[0]", "PSW[0]"],["PSW[1]", "PSW[1]"],["PSW[2]", "PSW[2]"],["PSW[3]", "PSW[3]"],
-            ["PSW[4]", "PSW[4]"],["PSW[5]", "PSW[5]"],["CT", "CT"],["CONST 0", "CONST 0"],
-            ["FLG[0]", "Level 1"],["FLG[1]", "Level 2.1"],["FLG[2]", "Level 2.2"],["FLG[3]", "Level 3"],
-            ["FLG[4]", "Level 4"],["FLG[5]", "Level 5"],["FLG[6]", "RK[11/9] == 0"],["FLG[7]", "RK[5/3] == 0"]
+            ["PSW[0]", "PSW[0]"], ["PSW[1]", "PSW[1]"], ["PSW[2]", "PSW[2]"], ["PSW[3]", "PSW[3]"],
+            ["PSW[4]", "PSW[4]"], ["PSW[5]", "PSW[5]"], ["CT", "CT"], ["CONST 0", "CONST 0"],
+            ["FLG[0]", "Level 1"], ["FLG[1]", "Level 2.1"], ["FLG[2]", "Level 2.2"], ["FLG[3]", "Level 3"],
+            ["FLG[4]", "Level 4"], ["FLG[5]", "Level 5"], ["FLG[6]", "RK[11/9] == 0"], ["FLG[7]", "RK[5/3] == 0"]
         ];
         const inversion = (M[1] == EInvMaskM2.NOT || M[1] == EInvMaskM2.NOT_MASK);
         const has_mask = (M[1] == EInvMaskM2.NNOT_MASK || M[1] == EInvMaskM2.NOT_MASK);
