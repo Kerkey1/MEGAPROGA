@@ -110,7 +110,6 @@ const App = observer(() => {
             mainRom[i] = new Command(BigInt(name[i]))
         }
         for (let i = 0; i < length; i++) {
-            console.log(mainRom[i].Raw().toString())
             let newRow = {
                 key: i,
                 address: i,
@@ -178,14 +177,24 @@ const App = observer(() => {
     }
 
     const startTesting = () => {
-        start_regs = new Registers(initialValues)
-        if (z === 0) {
-            Exec(start_regs, mainRom, z, tact)
-                .then((v) => setRegister(v))
-                .then(() => setRedact(false))
+
+        if (!tact) {
+            alert("Введите количество тактов!")
+        } else if (tact < 1 || tact > 4096) {
+            alert("Количество тактов должно быть не меньше 1, не больше 4096")
         } else {
-            Exec(start_regs, mainRom, z, tact).then((v) => setRegister(v))
-                .then(() => regs[z] = new Registers(initialValues)).then(() => setRedact(false))
+            start_regs = new Registers(initialValues)
+            let curCMK = start_regs.CMK
+            console.log(start_regs,mainRom,curCMK,tact)
+            if (z === 0) {
+                Exec(start_regs, mainRom, curCMK, tact)
+                    .then((v) => setRegister(v))
+                    .then(() => setRedact(false))
+            } else {
+                Exec(start_regs, mainRom, curCMK, tact).then((v) => setRegister(v))
+                    .then(() => regs[z] = new Registers(initialValues)).then(() => setRedact(false))
+            }
+
         }
     }
 
@@ -203,8 +212,6 @@ const App = observer(() => {
                 mainRom[i] = new Command(0)
             result.commands.push(mainRom[i].Raw().toString())
         }
-
-        console.log(mainRom)
 
         saveJsonObjToFile(result)
     }

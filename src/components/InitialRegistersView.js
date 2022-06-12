@@ -7,7 +7,6 @@ const InitialRegistersView = observer(({initialValues}) => {
 
     const onChange = (event, id) => {
         initialValues[id] = parseInt(event.target.value, 8)
-
     }
 
     return <Row className="classForRegisters">
