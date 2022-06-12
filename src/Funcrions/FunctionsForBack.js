@@ -31,7 +31,14 @@ export const Exec = async function (curent_state, rom, cmd_index, tact_count) {
     });
     let returned_states_raw = await response.json();
     console.log(returned_states_raw)
-    return returned_states_raw
+
+    if(returned_states_raw.status === null){
+        return returned_states_raw.result
+    }
+    else{
+        return alert(returned_states_raw.status)
+    }
+
 }
 
 

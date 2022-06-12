@@ -36,7 +36,8 @@ let temp_regs = []
 let checkCommands = []
 let regs
 mainRom[0] = new Command()
-let initialValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+const getInitialValues = [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+let initialValues = [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 const App = observer(() => {
     const [form] = Form.useForm()
@@ -74,19 +75,13 @@ const App = observer(() => {
     const setRegister = (v) => {
         let i = z
         let temp
-        if (z === 0) {
-            for (i; i < v.result.length; i++) {
-                temp = v.result[i]
-                temp_regs[i] = new Registers(temp)
-            }
-            regs = temp_regs
-        } else {
-            for (i + 1; i < v.result.length; i++) {
-                temp = v.result[i - z - 1]
-                temp_regs[i] = new Registers(temp)
-            }
-            regs = temp_regs
+
+        for (i + 1; i < v.length; i++) {
+            temp = v[i - z - 1]
+            temp_regs[i] = new Registers(temp)
         }
+        regs = temp_regs
+
     }
 
     const onChange = (event) => {
@@ -149,7 +144,7 @@ const App = observer(() => {
         setRedact(true)
         regs = undefined
         temp_regs = []
-        initialValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        initialValues = getInitialValues
     }
 
     const addRow = () => {
@@ -184,17 +179,8 @@ const App = observer(() => {
             alert("Количество тактов должно быть не меньше 1, не больше 4096")
         } else {
             start_regs = new Registers(initialValues)
-            let curCMK = start_regs.CMK
-            console.log(start_regs,mainRom,curCMK,tact)
-            if (z === 0) {
-                Exec(start_regs, mainRom, curCMK, tact)
-                    .then((v) => setRegister(v))
-                    .then(() => setRedact(false))
-            } else {
-                Exec(start_regs, mainRom, curCMK, tact).then((v) => setRegister(v))
-                    .then(() => regs[z] = new Registers(initialValues)).then(() => setRedact(false))
-            }
-
+            Exec(start_regs, mainRom, z, tact).then((v) => setRegister(v))
+                .then(() => regs[z] = new Registers(initialValues)).then(() => setRedact(false)).then(() => setZ(z + 1))
         }
     }
 
@@ -230,7 +216,7 @@ const App = observer(() => {
         setZ(0)
         mainRom[0] = new Command()
         setRedact(true)
-        initialValues = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        initialValues = getInitialValues
         setDataSource([newRow])
     }
 
